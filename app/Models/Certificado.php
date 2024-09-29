@@ -9,6 +9,17 @@ class Certificado extends Model
 {
     use HasFactory;
 
-    // Asegúrate de que el nombre de la tabla es correcto
-    protected $table = 'certificados';
+    protected $table = 'certificados';  // Define la tabla asociada
+
+    protected $fillable = [
+        'nombre',        // Nombre del certificado (asumiendo que hay una columna nombre)
+        'template',      // Plantilla del certificado (si hay una columna para el archivo PDF)
+        // Otros campos que puedas tener
+    ];
+
+    // Relación con el modelo Configuracion
+    public function configuracion()
+    {
+        return $this->hasOne(Configuracion::class, 'idcertificado');
+    }
 }

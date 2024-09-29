@@ -9,6 +9,13 @@
             <a href="{{ route('certificados.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Crear Nuevo Certificado</a>
         </div>
 
+         <!-- Nuevo botón para la configuración de certificados -->
+         <div class="flex justify-center mb-4">
+            <a href="{{ route('configuracion.configuracioncertificado') }}" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">Configurar Certificados</a>
+        </div>
+
+
+
         @if (session('success'))
             <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
                 {{ session('success') }}
