@@ -51,10 +51,10 @@ class ConfiguracionController extends Controller
         //dd($request);
         // Validar los datos
         $request->validate([
-            'pos_x' => 'required|numeric|min:0', // Ancho máximo de A4 en mm
-            'pos_y' => 'required|numeric|min:0', // Alto máximo de A4 en mm
-            'fuente' => 'required|string|in:Arial,Helvetica,Times',
-            'tamaño_fuente' => 'required|numeric|min:8|max:72',
+            'pos_x' => 'required|numeric', // Ancho máximo de A4 en mm
+            'pos_y' => 'required|numeric', // Alto máximo de A4 en mm
+            'fuente' => 'required|string',
+            'tamaño_fuente' => 'required|numeric|min:8|max:100',
         ]);
 
         // Buscar o crear la configuración asociada al certificado
