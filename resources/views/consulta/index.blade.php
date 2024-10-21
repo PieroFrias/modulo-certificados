@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,12 +35,6 @@
             color: #63b3ed;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-top: 50px;
-        }
-
         h1 {
             font-size: 2.5rem;
             font-weight: 600;
@@ -47,10 +42,9 @@
             margin-bottom: 2rem;
         }
 
-        /* Estilos de la barra de búsqueda tipo Google */
         .search-bar {
             position: relative;
-            max-width: 600px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
@@ -103,9 +97,11 @@
             width: 100%;
             margin-top: 2rem;
             border-collapse: collapse;
+            overflow-x: auto;
         }
 
-        table th, table td {
+        table th,
+        table td {
             padding: 12px 15px;
             text-align: left;
             background-color: #2d3748;
@@ -129,8 +125,16 @@
         .btn-container {
             margin-top: 2rem;
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .btn-container {
+                flex-direction: row;
+                gap: 20px;
+            }
         }
 
         .btn {
@@ -149,6 +153,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav>
         <a href="/" class="font-bold">Inicio</a>
@@ -168,7 +173,9 @@
                 <input type="text" name="dni" placeholder="Ingrese su DNI" class="border rounded">
                 <button type="submit" class="search-btn">
                     <svg viewBox="0 0 24 24">
-                        <path fill-rule="evenodd" d="M10 2a8 8 0 105.293 14.293l5.707 5.707a1 1 0 01-1.414 1.414l-5.707-5.707A8 8 0 1010 2zm0 2a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd"
+                            d="M10 2a8 8 0 105.293 14.293l5.707 5.707a1 1 0 01-1.414 1.414l-5.707-5.707A8 8 0 1010 2zm0 2a6 6 0 100 12 6 6 0 000-12z"
+                            clip-rule="evenodd" />
                     </svg>
                 </button>
             </form>
@@ -177,35 +184,37 @@
         @if ($alumno)
             <div class="mt-8">
                 <h2 class="text-2xl font-semibold">Resultado de la búsqueda del alumno:</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>DNI</th>
-                            <th>Curso</th>
-                            <th>Certificado</th> <!-- Nueva columna para el certificado -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ $alumno->nombre }}</td>
-                            <td>{{ $alumno->apellido }}</td>
-                            <td>{{ $alumno->dni }}</td>
-                            <td>{{ $alumno->curso->nombre }}</td>
-                            <td>{{ $alumno->curso->certificado->nombre }}</td> <!-- Mostrar el nombre del certificado -->
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>DNI</th>
+                                <th>Curso</th>
+                                <th>Certificado</th> <!-- Nueva columna para el certificado -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ $alumno->nombre }}</td>
+                                <td>{{ $alumno->apellido }}</td>
+                                <td>{{ $alumno->dni }}</td>
+                                <td>{{ $alumno->curso->nombre }}</td>
+                                <td>{{ $alumno->curso->certificado->nombre }}</td> <!-- Mostrar el nombre del certificado -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Botones para descargar y ver certificado -->
             <div class="btn-container">
                 <a href="{{ route('consulta.index', ['dni' => $alumno->dni, 'action' => 'download']) }}" class="btn">Descargar Certificado</a>
-
                 <a href="{{ route('consulta.index', ['dni' => $alumno->dni, 'action' => 'view']) }}" class="btn">Ver Certificado</a>
             </div>
         @endif
     </div>
 </body>
+
 </html>
