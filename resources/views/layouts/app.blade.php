@@ -1,4 +1,3 @@
-<!-- resources/views/layouts/app.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,20 +6,20 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     @vite('resources/css/app.css') <!-- Cargar CSS con Vite -->
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-100">
     <nav class="bg-blue-600 p-4 text-white">
         <div class="container mx-auto">
             <a href="/" class="font-bold">Inicio</a>
         </div>
     </nav>
 
-    <!-- Hacemos que el <main> crezca para ocupar todo el espacio disponible -->
-    <main class="flex-grow container mx-auto p-4">
+    <!-- Contenido principal -->
+    <main class="container mx-auto p-4 pb-16">
         @yield('content')
     </main>
 
-    <!-- Footer siempre en la parte inferior -->
-    <footer class="bg-gray-800 text-white p-4 mt-auto w-full">
+    <!-- Footer fijo en la parte inferior -->
+    <footer class="bg-gray-800 text-white p-4 w-full fixed bottom-0 left-0 z-10">
         <div class="container mx-auto text-center">
             © 2024 - Todos los derechos reservados.
         </div>

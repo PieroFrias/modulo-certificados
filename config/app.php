@@ -1,6 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Facade;
+
 return [
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +126,15 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+//     'aliases' => [
+//     'PDF' => Barryvdh\DomPDF\Facade::class,
+// ],
+
+//     'providers' => [
+//         Illuminate\Filesystem\FilesystemServiceProvider::class,
+//     Barryvdh\DomPDF\ServiceProvider::class,
+// ],
+
 
 ];
