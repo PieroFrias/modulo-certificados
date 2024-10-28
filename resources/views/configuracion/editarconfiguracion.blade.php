@@ -5,13 +5,13 @@
     <h1 class="text-4xl font-bold mb-6 text-center">Editar Configuración de {{ $certificado->nombre }}</h1>
 
     <!-- Mostrar el PDF y las medidas -->
-    <div class="pdf-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <canvas id="pdf-render" style="border: 1px solid black;"></canvas> <!-- Tamaño ajustable según la orientación -->
+    <div class="pdf-container" style="position: relative; width: 100%; max-width: 800px; height: auto; margin: 0 auto;">
+        <canvas id="pdf-render" style="border: 1px solid black; width: 100%;"></canvas> <!-- Tamaño ajustable según la orientación -->
         <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Mostrar dimensiones del PDF -->
 
         <!-- Elementos arrastrables -->
-        <div id="draggable-container" style="position: absolute; top: 0; left: 0;">
-            <div id="nombre" class="draggable" style="position: absolute; top: {{ $configuracion->pos_y }}px; left: {{ $configuracion->pos_x }}px; background-color: transparent; border: none;">
+        <div id="draggable-container">
+            <div id="nombre" class="draggable" style="position: absolute; top: {{ $configuracion->pos_y }}px; transform: translateX(50%); left: 50%; background-color: transparent; border: none;">
                 Nombre
             </div>
         </div>
@@ -122,14 +122,16 @@
                 // Posicionar el elemento 'draggable' en la posición guardada (en milímetros)
                 const posXmm = parseFloat(document.getElementById('input_pos_x').value);
                 const posYmm = parseFloat(document.getElementById('input_pos_y').value);
-
+                
                 // Convertir las coordenadas de milímetros a píxeles
                 const posXpx = mmToPx(posXmm);
                 const posYpx = mmToPx(posYmm);
 
                 draggable.style.position = 'absolute';
                 draggable.style.left = `${posXpx}px`;
+                draggable.style.textAlign = 'center';  // Alinea el texto en el centro
                 draggable.style.top = `${posYpx}px`;
+                draggable.style.width = 'auto'; // Ajustar ancho al contenido del elemento
                 draggable.style.display = 'block'; // Asegurarse de que el elemento sea visible
             });
         });
@@ -209,13 +211,17 @@
         background-color: black;
         padding: 10px;
         cursor: move;
-        position: absolute;
+        position: relative;
+        width: auto;
+        max-width: 100%;
         font-size: 20px;
         font-family: Arial, sans-serif;
+        text-align: center;
     }
     form {
         position: relative;
         z-index: 10; /* Asegurar que los campos del formulario tengan prioridad sobre el área arrastrable */
     }
+
 </style>
 @endsection
