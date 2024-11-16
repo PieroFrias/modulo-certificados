@@ -1,34 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="text-4xl font-bold mb-6 text-center">Editar Configuración de {{ $certificado->nombre }}</h1>
+<div class="container mx-auto flex gap-4">
+    <!-- Formulario de Configuración -->
+    <div class="w-1/4 bg-gray-100 p-4 rounded shadow-md">
+        <form id="form-configuracion" action="{{ route('configuracion.update', $certificado->id) }}" method="POST" class="space-y-4">
+            @csrf
+            @method('PUT')
 
-    <!-- Mostrar el PDF y las medidas -->
-    <div class="pdf-container" style="position: relative; width: 100%; max-width: 800px; height: auto; margin: 0 auto;">
-        <canvas id="pdf-render" style="border: 1px solid black; width: 100%;"></canvas> <!-- Tamaño ajustable según la orientación -->
-        <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Mostrar dimensiones del PDF -->
+            <!-- Título del Formulario -->
+            <h2 class="text-lg font-semibold text-gray-700">Configuración</h2>
 
-        <!-- Línea vertical -->
-        <div id="vertical-line" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background-color: red; display: none;"></div>
-
-        <!-- Elementos arrastrables -->
-        <div id="draggable-container" style="position: absolute; top: 0; left: 0;">
-            <div id="nombre" class="draggable" style="position: absolute; top: {{ $configuracion->pos_y }}px; left: {{ $configuracion->pos_x }}px; background-color: transparent; border: none;">
-                N
-            </div>
-        </div>
-        <p id="coords" class="text-center mt-2"></p> <!-- Mostrar coordenadas en tiempo real -->
-    </div>
-
-    <!-- Formulario para cambiar fuente y tamaño de fuente -->
-    <form id="form-configuracion" action="{{ route('configuracion.update', $certificado->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <!-- Selección de Fuente -->
             <div class="form-group">
                 <label for="fuente" class="block text-sm font-medium text-gray-700">Fuente:</label>
-                <select name="fuente" id="fuente" class="form-control block w-full mt-1">
+                <select name="fuente" id="fuente" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
                     <option value="Arial" {{ $configuracion->fuente == 'Arial' ? 'selected' : '' }}>Arial</option>
                     <option value="Helvetica" {{ $configuracion->fuente == 'Helvetica' ? 'selected' : '' }}>Helvetica</option>
                     <option value="Times" {{ $configuracion->fuente == 'Times' ? 'selected' : '' }}>Times New Roman</option>
@@ -40,25 +26,40 @@
                 </select>
             </div>
 
+            <!-- Tamaño de Fuente -->
             <div class="form-group">
-                <label for="tamaño_fuente" class="block text-sm font-medium text-gray-700">Tamaño de la fuente:</label>
-                <input type="number" name="tamaño_fuente" id="tamaño_fuente" value="{{ $configuracion->tamaño_fuente }}" class="form-control block w-full mt-1" min="8" max="72">
+                <label for="tamaño_fuente" class="block text-sm font-medium text-gray-700">Tamaño:</label>
+                <input type="number" name="tamaño_fuente" id="tamaño_fuente" value="{{ $configuracion->tamaño_fuente }}" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300" min="8" max="72">
             </div>
+
+            <!-- Botón para guardar cambios -->
+            <button type="submit" class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-400 focus:ring focus:ring-blue-300">
+                Guardar
+            </button>
 
             <!-- Coordenadas ocultas -->
             <input type="hidden" name="pos_x" id="input_pos_x" value="{{ $configuracion->pos_x }}">
             <input type="hidden" name="pos_y" id="input_pos_y" value="{{ $configuracion->pos_y }}">
-        </div>
+        </form>
+    </div>
 
-        <!-- Botón para guardar cambios manualmente -->
-        <div class="text-left mt-6">
-            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Guardar Cambios</button>
-        </div>
-    </form>
+    <!-- Contenedor del Certificado -->
+    <div class="w-3/4">
+        <div class="pdf-container relative">
+            <canvas id="pdf-render" class="border border-gray-300"></canvas> <!-- Certificado Renderizado -->
+            <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Dimensiones del PDF -->
 
-    <!-- Notificación -->
-    <div id="notification" class="mt-4 text-green-500"></div>
+            <!-- Elementos Arrastrables -->
+            <div id="draggable-container" style="position: absolute; top: 0; left: 0;">
+                <div id="nombre" class="draggable" style="position: absolute; top: {{ $configuracion->pos_y }}px; left: {{ $configuracion->pos_x }}px; background-color: transparent; border: none;">
+                    N
+                </div>
+            </div>
+            <p id="coords" class="text-center mt-2"></p> <!-- Mostrar Coordenadas -->
+        </div>
+    </div>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
 <script>
