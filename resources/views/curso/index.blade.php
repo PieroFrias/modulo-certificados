@@ -24,7 +24,6 @@
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">ID</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Nombre</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Estado</th>
-                            <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Certificado</th> <!-- Mostrar el nombre del certificado -->
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -34,14 +33,15 @@
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $curso->idcurso }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $curso->nombre }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $curso->estado ? 'Activo' : 'Inactivo' }}</td>
-                            <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $curso->certificado->nombre }}</td> <!-- Mostrar el nombre del certificado -->
                             <td class="py-2 px-2 sm:py-3 sm:px-6 text-center flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                                <a href="{{ route('curso.alumnos', $curso->idcurso) }}" class="bg-green-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-green-600 text-xs sm:text-sm">Lista Alumnos</a>
                                 <a href="{{ route('curso.edit', $curso->idcurso) }}" class="bg-yellow-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-yellow-600 text-xs sm:text-sm">Editar</a>
                                 <form action="{{ route('curso.destroy', $curso->idcurso) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="bg-red-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-red-600 text-xs sm:text-sm">Eliminar</button>
                                 </form>
+
                             </td>
                         </tr>
                         @endforeach

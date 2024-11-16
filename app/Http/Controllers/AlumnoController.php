@@ -6,14 +6,29 @@ use Illuminate\Http\Request;
 use App\Models\Alumno;
 use App\Models\Curso;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\AlumnoImport;
+
 class AlumnoController extends Controller
 {
     // Mostrar la lista de alumnos
-    public function index()
+    public function index(Request $request)
     {
-        $alumnos = Alumno::with('curso')->get(); // Obtener los alumnos con su curso relacionado
+        $query = Alumno::with('curso');
+
+        // Filtro por búsqueda
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('nombre', 'like', "%$search%")
+                  ->orWhere('apellido', 'like', "%$search%")
+                  ->orWhere('dni', 'like', "%$search%");
+        }
+
+        $alumnos = $query->paginate(10); // Paginación de 10 elementos
+
         return view('alumno.index', compact('alumnos'));
     }
+
 
     // Mostrar el formulario para crear un nuevo alumno
     public function create()
@@ -24,22 +39,23 @@ class AlumnoController extends Controller
 
     // Almacenar un nuevo alumno
     public function store(Request $request)
-    {
-        // Validar los datos del formulario
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
-            'dni' => 'required|string|size:8|unique:alumno,dni',
-            'idcurso' => 'required|exists:curso,idcurso',
-            'estado' => 'required|boolean',
-        ]);
+{
+    // Validar los datos del formulario
+    $validated = $request->validate([
+        'nombre' => 'required|string|max:255',
+        'apellido' => 'required|string|max:255',
+        'dni' => 'required|string|max:15', // Eliminado el unique
+        'idcurso' => 'required|exists:curso,idcurso',
+        'estado' => 'required|boolean',
+    ]);
 
-        // Crear un nuevo registro en la base de datos
-        Alumno::create($validated);
+    // Crear un nuevo registro en la base de datos
+    Alumno::create($validated);
 
-        // Redirigir a la lista de alumnos con un mensaje de éxito
-        return redirect()->route('alumno.index')->with('success', 'Alumno creado correctamente.');
-    }
+    // Redirigir a la lista de alumnos con un mensaje de éxito
+    return redirect()->route('alumno.index')->with('success', 'Alumno creado correctamente.');
+}
+
 
     // Mostrar el formulario de edición para un alumno
     public function edit($id)
@@ -56,7 +72,7 @@ class AlumnoController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'dni' => 'required|string|size:8|unique:alumno,dni,' . $id,
+            'dni' => 'required|string|size:15', // Eliminado el unique
             'idcurso' => 'required|exists:curso,idcurso',
             'estado' => 'required|boolean',
         ]);
@@ -69,6 +85,7 @@ class AlumnoController extends Controller
         return redirect()->route('alumno.index')->with('success', 'Alumno actualizado correctamente.');
     }
 
+
     // Eliminar un alumno
     public function destroy($id)
     {
@@ -78,4 +95,57 @@ class AlumnoController extends Controller
         // Redirigir a la lista de alumnos con un mensaje de éxito
         return redirect()->route('alumno.index')->with('success', 'Alumno eliminado correctamente.');
     }
+
+    //ver pagina para importar alumnos
+    public function show()
+    {
+        return view('alumno.importaralumno');
+    }
+
+    // //ahora un metodo para importar alumnos
+    // public function importar(Request $request)
+    // {
+    //     $file = $request->file('file');
+    //     $data = Excel::toArray(new AlumnoImport(), $file);
+    //     $alumnos = [];
+    //     foreach ($data[0] as $alumno) {
+
+    //         $alumnos[] = [
+    //             'nombre' => $alumno['nombre'],
+    //             'apellido' => $alumno['apellido'],
+    //             'dni' => $alumno['dni'],
+    //             'idcurso' => $alumno['idcurso'],
+    //             'estado' => $alumno['estado'],
+    //             ];
+    //             }
+    //             Alumno::insert($alumnos);
+    //             return redirect()->route('alumno.index')->with('success', 'Alumnos importados correctamente.');
+    //             }
+
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls,csv',
+    ]);
+
+    $file = $request->file('file');
+    $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME); // Nombre del archivo sin extensión
+
+    try {
+        // Importar los datos del Excel
+        Excel::import(new AlumnoImport($filename), $file);
+
+        return redirect()->route('alumno.index')->with('success', 'Alumnos importados correctamente.');
+    } catch (\Exception $e) {
+        return redirect()->route('alumno.index')->with('error', 'Error durante la importación: ' . $e->getMessage());
+    }
+}
+
+public function descargarPlantilla()
+{
+    $path = public_path('plantillas/plantilla_alumnos.xlsx'); // Asegúrate de tener este archivo en tu directorio
+    return response()->download($path, 'plantilla_alumnos.xlsx');
+}
+
+
 }

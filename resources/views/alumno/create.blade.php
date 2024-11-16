@@ -33,7 +33,7 @@
 
             <div>
                 <label for="dni" class="block text-sm font-medium text-gray-700">DNI</label>
-                <input type="text" name="dni" id="dni" maxlength="8" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                <input type="text" name="dni" id="dni" maxlength="15" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
             </div>
 
             <div>

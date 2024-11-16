@@ -9,10 +9,13 @@
         <canvas id="pdf-render" style="border: 1px solid black;"></canvas> <!-- Tamaño ajustable según la orientación -->
         <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Mostrar dimensiones del PDF -->
 
+        <!-- Línea vertical -->
+        <div id="vertical-line" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background-color: red; display: none;"></div>
+
         <!-- Elementos arrastrables -->
         <div id="draggable-container" style="position: absolute; top: 0; left: 0;">
             <div id="nombre" class="draggable" style="position: absolute; top: {{ $configuracion->pos_y }}px; left: {{ $configuracion->pos_x }}px; background-color: transparent; border: none;">
-                Nombre
+                N
             </div>
         </div>
         <p id="coords" class="text-center mt-2"></p> <!-- Mostrar coordenadas en tiempo real -->
@@ -74,6 +77,57 @@
     const A4_HEIGHT_MM = 297; // Alto A4 en mm
     const MM_TO_PX = 3.7795275591; // Conversión de mm a píxeles
 
+    // Crear las líneas vertical y horizontal
+    const verticalLine = document.createElement('div');
+    verticalLine.id = 'vertical-line';
+    verticalLine.style.position = 'absolute';
+    verticalLine.style.width = '1px';
+    verticalLine.style.height = '100%';
+    verticalLine.style.backgroundColor = 'red';
+    verticalLine.style.display = 'none';
+    verticalLine.style.zIndex = '100';
+    draggableContainer.appendChild(verticalLine);
+
+    const horizontalLine = document.createElement('div');
+    horizontalLine.id = 'horizontal-line';
+    horizontalLine.style.position = 'absolute';
+    horizontalLine.style.height = '1px';
+    horizontalLine.style.width = '100%';
+    horizontalLine.style.backgroundColor = 'red';
+    horizontalLine.style.display = 'none';
+    horizontalLine.style.zIndex = '100';
+    draggableContainer.appendChild(horizontalLine);
+
+    // Mostrar las líneas al centrar el elemento
+    const toggleLines = () => {
+        const canvasRect = canvas.getBoundingClientRect();
+        const draggableRect = draggable.getBoundingClientRect();
+
+        // Coordenadas del centro del canvas
+        const canvasCenterX = canvasRect.left + canvasRect.width / 2;
+        const canvasCenterY = canvasRect.top + canvasRect.height / 2;
+
+        // Coordenadas del centro del elemento draggable
+        const draggableCenterX = draggableRect.left + draggableRect.width / 2;
+        const draggableCenterY = draggableRect.top + draggableRect.height / 2;
+
+        // Mostrar la línea vertical si el centro horizontal está alineado
+        if (Math.abs(canvasCenterX - draggableCenterX) < 2) { // Umbral de 2px
+            verticalLine.style.left = `${canvasRect.width / 2}px`;
+            verticalLine.style.display = 'block';
+        } else {
+            verticalLine.style.display = 'none';
+        }
+
+        // Mostrar la línea horizontal si el centro vertical está alineado
+        if (Math.abs(canvasCenterY - draggableCenterY) < 2) { // Umbral de 2px
+            horizontalLine.style.top = `${canvasRect.height / 2}px`;
+            horizontalLine.style.display = 'block';
+        } else {
+            horizontalLine.style.display = 'none';
+        }
+    };
+
     let pdfDoc = null,
         pageNum = 1,
         dragging = false,
@@ -85,70 +139,56 @@
     // Renderizar página del PDF ajustándola al tamaño A4, manteniendo la proporción y centrando
     const renderPage = (num) => {
         pdfDoc.getPage(num).then((page) => {
-            // Crear un viewport escalado para ajustarse al tamaño A4
             const originalViewport = page.getViewport({ scale: 1 });
-
-            // Determinar la orientación del PDF
             const isLandscape = originalViewport.width > originalViewport.height;
 
-            // Definir dimensiones del canvas para A4 en píxeles, tomando en cuenta la orientación
             let canvasWidth = isLandscape ? A4_HEIGHT_MM * MM_TO_PX : A4_WIDTH_MM * MM_TO_PX;
             let canvasHeight = isLandscape ? A4_WIDTH_MM * MM_TO_PX : A4_HEIGHT_MM * MM_TO_PX;
 
-            // Escala para mantener la proporción del PDF ajustándolo al tamaño A4
             scale = Math.min(canvasWidth / originalViewport.width, canvasHeight / originalViewport.height);
             const viewport = page.getViewport({ scale });
 
-            // Ajustar dimensiones del canvas al tamaño A4
             canvas.width = canvasWidth;
             canvas.height = canvasHeight;
 
-            // Limpiar el canvas antes de renderizar
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Renderizar el PDF en el canvas
             const renderContext = {
                 canvasContext: ctx,
                 viewport: viewport
             };
             page.render(renderContext).promise.then(() => {
-                // Ajustar el contenedor arrastrable a las dimensiones del canvas
                 draggableContainer.style.width = `${canvasWidth}px`;
                 draggableContainer.style.height = `${canvasHeight}px`;
 
-                // Mostrar dimensiones del PDF en milímetros
                 pdfDimensions.innerText = `Tamaño del PDF ajustado a A4: ${A4_WIDTH_MM} mm de ancho por ${A4_HEIGHT_MM} mm de alto`;
 
-                // Posicionar el elemento 'draggable' en la posición guardada (en milímetros)
                 const posXmm = parseFloat(document.getElementById('input_pos_x').value);
                 const posYmm = parseFloat(document.getElementById('input_pos_y').value);
 
-                // Convertir las coordenadas de milímetros a píxeles
                 const posXpx = mmToPx(posXmm);
                 const posYpx = mmToPx(posYmm);
 
                 draggable.style.position = 'absolute';
                 draggable.style.left = `${posXpx}px`;
                 draggable.style.top = `${posYpx}px`;
-                draggable.style.display = 'block'; // Asegurarse de que el elemento sea visible
+                draggable.style.display = 'block';
             });
         });
     };
 
-    // Obtener el PDF
     pdfjsLib.getDocument(url).promise.then((pdfDoc_) => {
         pdfDoc = pdfDoc_;
         renderPage(pageNum);
     });
 
-    // Aplicar fuente, tamaño y posición iniciales al cargar la página
     window.addEventListener('load', () => {
         draggable.style.fontFamily = fuenteSelect.value;
         draggable.style.fontSize = `${tamañoFuenteInput.value}px`;
     });
 
-    // Funcionalidad para arrastrar y soltar con visualización en tiempo real de coordenadas
     draggable.addEventListener('mousedown', function (event) {
+        event.preventDefault();
         dragging = true;
 
         let offsetX = event.clientX - parseInt(window.getComputedStyle(this).left);
@@ -160,7 +200,6 @@
             let newX = e.clientX - offsetX;
             let newY = e.clientY - offsetY;
 
-            // Limitar el movimiento dentro del área del canvas (PDF)
             const canvasRect = canvas.getBoundingClientRect();
             if (newX < 0) newX = 0;
             if (newY < 0) newY = 0;
@@ -170,24 +209,25 @@
             draggable.style.left = `${newX}px`;
             draggable.style.top = `${newY}px`;
 
-            // Mostrar coordenadas en milímetros en tiempo real
             const posXmm = (newX / MM_TO_PX).toFixed(2);
             const posYmm = (newY / MM_TO_PX).toFixed(2);
             coordsDisplay.innerText = `Posición actual: X: ${posXmm} mm, Y: ${posYmm} mm`;
 
-            // Actualizar campos ocultos en el formulario con valores en milímetros
             document.getElementById('input_pos_x').value = posXmm;
             document.getElementById('input_pos_y').value = posYmm;
+
+            toggleLines();
         }
 
         document.addEventListener('mousemove', mouseMoveHandler);
         document.addEventListener('mouseup', function () {
             dragging = false;
             document.removeEventListener('mousemove', mouseMoveHandler);
+            verticalLine.style.display = 'none';
+            horizontalLine.style.display = 'none';
         });
     });
 
-    // Cambiar el tamaño y la fuente del texto en tiempo real
     fuenteSelect.addEventListener('change', () => {
         draggable.style.fontFamily = fuenteSelect.value;
     });
@@ -196,6 +236,7 @@
         draggable.style.fontSize = `${tamañoFuenteInput.value}px`;
     });
 </script>
+
 
 <style>
 
@@ -206,13 +247,18 @@
         z-index: 5; /* Ajustar el índice z para asegurar que el formulario tenga prioridad */
     }
     .draggable {
-        background-color: black;
-        padding: 10px;
-        cursor: move;
-        position: absolute;
-        font-size: 20px;
-        font-family: Arial, sans-serif;
-    }
+    background-color: black;
+    padding: 1px;
+    cursor: move;
+    position: absolute;
+    font-size: 1px;
+    font-family: Arial, sans-serif;
+    user-select: none; /* Evitar selección de texto */
+    -webkit-user-select: none; /* Para Safari */
+    -moz-user-select: none; /* Para Firefox */
+    -ms-user-select: none; /* Para IE/Edge */
+}
+
     form {
         position: relative;
         z-index: 10; /* Asegurar que los campos del formulario tengan prioridad sobre el área arrastrable */

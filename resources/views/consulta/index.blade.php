@@ -6,215 +6,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Certificado Alumno</title>
     @vite('resources/css/app.css')
-    <style>
-        body {
-            background-color: #1a202c; /* Fondo oscuro */
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-        }
-
-        nav {
-            width: 100%;
-            background-color: #2d3748; /* Fondo del nav */
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: #63b3ed;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .search-bar {
-            position: relative;
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        .search-bar input[type="text"] {
-            width: 100%;
-            padding: 15px 50px 15px 20px;
-            border-radius: 50px;
-            border: none;
-            background-color: #2d3748;
-            color: #fff;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            outline: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar input[type="text"]::placeholder {
-            color: #a0aec0;
-        }
-
-        .search-bar input[type="text"]:focus {
-            background-color: #4a5568;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .search-btn {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #3182ce;
-            border: none;
-            border-radius: 50%;
-            padding: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-btn:hover {
-            background-color: #63b3ed;
-        }
-
-        .search-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #fff;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 2rem;
-            border-collapse: collapse;
-            overflow-x: auto;
-        }
-
-        table th,
-        table td {
-            padding: 12px 15px;
-            text-align: left;
-            background-color: #2d3748;
-            color: #fff;
-            border-bottom: 1px solid #4a5568;
-        }
-
-        table th {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        table td {
-            font-size: 0.875rem;
-        }
-
-        table tbody tr:hover {
-            background-color: #4a5568;
-        }
-
-        .btn-container {
-            margin-top: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-
-        @media (min-width: 640px) {
-            .btn-container {
-                flex-direction: row;
-                gap: 20px;
-            }
-        }
-
-        .btn {
-            padding: 10px 20px;
-            background-color: #3182ce;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #63b3ed;
-        }
-    </style>
 </head>
 
-<body>
-    <nav>
-        <a href="/" class="font-bold">Inicio</a>
+<body class="bg-gray-900 text-white font-sans">
+    <nav class="w-full bg-gray-800 py-4 px-6 shadow-md flex justify-between items-center">
+        <a href="/" class="text-white text-lg font-bold hover:text-blue-400">Inicio</a>
     </nav>
 
     <div class="container mx-auto p-6">
-        <h1>Consulta Certificado Alumno</h1>
+        <h1 class="text-center text-4xl font-bold mb-6">Consulta Certificado Alumno</h1>
 
-        <div class="search-bar mb-6">
-            @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
 
+
+        <div class="search-bar mb-6 max-w-lg mx-auto relative">
             <form action="{{ route('consulta.index') }}" method="GET">
-                <input type="text" name="dni" placeholder="Ingrese su DNI" class="border rounded">
-                <button type="submit" class="search-btn">
-                    <svg viewBox="0 0 24 24">
-                        <path fill-rule="evenodd"
-                            d="M10 2a8 8 0 105.293 14.293l5.707 5.707a1 1 0 01-1.414 1.414l-5.707-5.707A8 8 0 1010 2zm0 2a6 6 0 100 12 6 6 0 000-12z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
+                <input
+                    type="text"
+                    name="dni"
+                    placeholder="Ingrese su DNI"
+                    class="w-full p-4 rounded-full border-none bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-gray-700"
+                    value="{{ old('dni') }}">
+                    <button
+                        type="submit"
+                        class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white p-2 rounded-full hover:bg-blue-400 mx-2">
+                            <svg viewBox="0 0 24 24" class="w-6 h-6" style="fill: white;">
+                                <path fill-rule="evenodd" d="M10 2a8 8 0 105.293 14.293l5.707 5.707a1 1 0 01-1.414 1.414l-5.707-5.707A8 8 0 1010 2zm0 2a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd" />
+                            </svg>
+                    </button>
+
+
             </form>
         </div>
 
-        @if ($alumno)
+        <!-- Mostrar mensajes de error con un contenedor dinámico -->
+        @if ($errors->any())
+            <div id="error-messages" class="bg-red-500 text-white p-4 rounded mb-6">
+                <ul class="list-disc pl-6">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if ($alumnos && $alumnos->isNotEmpty())
             <div class="mt-8">
-                <h2 class="text-2xl font-semibold">Resultado de la búsqueda del alumno:</h2>
+                <h2 class="text-2xl font-semibold mb-4">Resultados de la búsqueda del alumno:</h2>
                 <div class="overflow-x-auto">
-                    <table>
+                    <table class="table-auto w-full text-left border-collapse">
                         <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>DNI</th>
-                                <th>Curso</th>
-                                <th>Certificado</th> <!-- Nueva columna para el certificado -->
+                            <tr class="bg-gray-800">
+                                <th class="px-4 py-2">Nombre</th>
+                                <th class="px-4 py-2">Apellido</th>
+                                <th class="px-4 py-2">DNI</th>
+                                <th class="px-4 py-2">Curso</th>
+                                <th class="px-4 py-2">Certificado</th>
+                                <th class="px-4 py-2">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{{ $alumno->nombre }}</td>
-                                <td>{{ $alumno->apellido }}</td>
-                                <td>{{ $alumno->dni }}</td>
-                                <td>{{ $alumno->curso->nombre }}</td>
-                                <td>{{ $alumno->curso->certificado->nombre }}</td> <!-- Mostrar el nombre del certificado -->
-                            </tr>
+                            @foreach ($alumnos as $alumno)
+                                <tr class="odd:bg-gray-800 even:bg-gray-700 hover:bg-gray-600">
+                                    <td class="px-4 py-2">{{ $alumno->nombre }}</td>
+                                    <td class="px-4 py-2">{{ $alumno->apellido }}</td>
+                                    <td class="px-4 py-2">{{ $alumno->dni }}</td>
+                                    <td class="px-4 py-2">{{ optional($alumno->curso)->nombre }}</td>
+                                    <td class="px-4 py-2">{{ optional(optional($alumno->curso)->certificado)->nombre }}</td>
+                                    <td class="px-4 py-2">
+                                        <div class="flex flex-col sm:flex-row gap-2">
+                                            <a href="{{ route('consulta.index', ['dni' => $alumno->dni, 'action' => 'download', 'curso_id' => optional($alumno->curso)->idcurso]) }}"
+                                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 text-center">
+                                                Descargar Certificado
+                                            </a>
+                                            <a href="{{ route('consulta.index', ['dni' => $alumno->dni, 'action' => 'view', 'curso_id' => optional($alumno->curso)->idcurso]) }}"
+                                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 text-center"
+                                                target="_blank" rel="noopener noreferrer">
+                                                Ver Certificado
+                                             </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
+        @else
+        <div class="mt-8 text-center">
+            @if (request()->has('dni') && $alumnos->isEmpty())
+                <h2 class="text-xl font-semibold">No se encontraron resultados para el DNI ingresado.</h2>
+            @endif
+        </div>
 
-            <!-- Botones para descargar y ver certificado -->
-            <div class="btn-container">
-                <a href="{{ route('consulta.index', ['dni' => $alumno->dni, 'action' => 'download']) }}" class="btn">Descargar Certificado</a>
-                <a href="{{ route('consulta.index', ['dni' => $alumno->dni, 'action' => 'view']) }}" class="btn">Ver Certificado</a>
-            </div>
         @endif
     </div>
+
+    <!-- Script para ocultar automáticamente el mensaje de error -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const errorMessages = document.getElementById('error-messages');
+            if (errorMessages) {
+                setTimeout(() => {
+                    errorMessages.style.transition = "opacity 0.5s ease";
+                    errorMessages.style.opacity = "0";
+                    setTimeout(() => errorMessages.remove(), 500); // Eliminar del DOM después de desaparecer
+                }, 3000); // Cambia este valor para ajustar el tiempo de visibilidad (3 segundos)
+            }
+        });
+    </script>
 </body>
 
 </html>

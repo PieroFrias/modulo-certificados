@@ -58,6 +58,15 @@ Route::put('curso/{id}', [CursoController::class, 'update'])->name('curso.update
 // Ruta para eliminar un curso
 Route::delete('curso/{id}', [CursoController::class, 'destroy'])->name('curso.delete');
 
+Route::get('/curso/{idcurso}/alumnos', [CursoController::class, 'alumnos'])->name('curso.alumnos');
+
+// Route::get('/curso/{idcurso}/certificados/masivos', [CursoController::class, 'generarCertificadosMasivos'])->name('curso.generar_certificados_masivos');
+Route::get('/curso/{idcurso}/certificado/{idalumno}', [CursoController::class, 'generarCertificado'])->name('curso.generar_certificado');
+
+Route::get('/curso/{idcurso}/certificados/masivos', [CursoController::class, 'generarCertificadosMasivos'])->name('curso.generar_certificados_masivos');
+
+
+
 
 // RUTA PARA ALUMNOS ------------------------------------------------------------------------
 Route::resource('alumno', AlumnoController::class);
@@ -71,6 +80,21 @@ Route::get('alumno/{id}/edit', [AlumnoController::class, 'edit'])->name('alumno.
 Route::put('alumno/{id}', [AlumnoController::class, 'update'])->name('alumno.update');
 // Ruta para eliminar un alumno
 Route::delete('alumno/{id}', [AlumnoController::class, 'destroy'])->name('alumno.delete');
+
+//ruta para importar alumnos
+Route::get('alumno/import', [AlumnoController::class, 'import'])->name('alumno.import');
+
+// Route::get('/alumno/{id}', [AlumnoController::class, 'show'])->name('alumno.show');
+
+Route::get('/alumno/importar', function () {return view('importaralumno');})->name('alumno.importar');
+
+Route::post('/alumno/importar', [AlumnoController::class, 'import'])->name('alumno.importar');
+
+Route::get('/alumno/plantilla', [AlumnoController::class, 'descargarPlantilla'])->name('alumno.plantilla');
+
+
+
+
 
 
 
@@ -91,5 +115,5 @@ Route::put('configuraciones/{idcertificado}', [ConfiguracionController::class, '
 
 
 
-
+// RUTA PARA ADMINISTRADOR LOGIN ------------------------------------------------------------------------
 
