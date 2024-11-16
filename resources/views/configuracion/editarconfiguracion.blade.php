@@ -5,8 +5,8 @@
     <h1 class="text-4xl font-bold mb-6 text-center">Editar Configuración de {{ $certificado->nombre }}</h1>
 
     <!-- Mostrar el PDF y las medidas -->
-    <div class="pdf-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <canvas id="pdf-render" style="border: 1px solid black;"></canvas> <!-- Tamaño ajustable según la orientación -->
+    <div class="pdf-container" style="position: relative; width: 100%; max-width: 800px; height: auto; margin: 0 auto;">
+        <canvas id="pdf-render" style="border: 1px solid black; width: 100%;"></canvas> <!-- Tamaño ajustable según la orientación -->
         <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Mostrar dimensiones del PDF -->
 
         <!-- Línea vertical -->
@@ -171,6 +171,7 @@
 
                 draggable.style.position = 'absolute';
                 draggable.style.left = `${posXpx}px`;
+                draggable.style.textAlign = 'center';  // Alinea el texto en el centro
                 draggable.style.top = `${posYpx}px`;
                 draggable.style.display = 'block';
             });
@@ -263,5 +264,6 @@
         position: relative;
         z-index: 10; /* Asegurar que los campos del formulario tengan prioridad sobre el área arrastrable */
     }
+
 </style>
 @endsection
