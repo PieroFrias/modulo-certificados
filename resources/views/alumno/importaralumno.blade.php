@@ -24,8 +24,18 @@
         <form action="{{ route('alumno.importar') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             <div class="form-group">
+                <label for="idcurso" class="block text-sm font-medium text-gray-700">Curso:</label>
+                <select name="idcurso" id="idcurso" class="form-control block w-full mt-1 p-2 border border-gray-300 rounded" required>
+                    <option value="" disabled selected>Seleccione un Curso</option>
+                    @foreach($cursos as $curso)
+                        <option value="{{ $curso->idcurso }}">{{ $curso->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="file" class="block text-sm font-medium text-gray-700">Archivo Excel:</label>
-                <input type="file" name="file" id="file" accept=".xlsx, .xls, .csv" class="form-control block w-full mt-1 p-2 border border-gray-300 rounded">
+                <input type="file" name="file" id="file" accept=".xlsx, .xls, .csv" class="form-control block w-full mt-1 p-2 border border-gray-300 rounded" required>
             </div>
 
             <div class="text-center">

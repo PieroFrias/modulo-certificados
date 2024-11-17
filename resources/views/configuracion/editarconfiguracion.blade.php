@@ -1,64 +1,83 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto flex gap-4">
-    <!-- Formulario de Configuración -->
-    <div class="w-1/4 bg-gray-100 p-4 rounded shadow-md">
-        <form id="form-configuracion" action="{{ route('configuracion.update', $certificado->id) }}" method="POST" class="space-y-4">
-            @csrf
-            @method('PUT')
+<div class="relative h-screen rounded-lg bg-gray-50 flex flex-col overflow-x-auto">
+    <!-- Nav -->
+    <nav class="absolute top-0 left-0 px-6 py-4 text-sm text-gray-500 z-10 bg-gray-50 w-full">
+        <ol class="list-reset flex">
+            <li><a href="{{ route('inicio.index') }}" class="text-blue-500 hover:underline">Inicio</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="{{ route('certificados.index') }}" class="text-blue-500 hover:underline">Plantillas</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="{{ route('configuracion.configuracioncertificado') }}" class="text-blue-500 hover:underline">Personalisar Plantilla</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-gray-700">Plantilla</li>
+        </ol>
+    </nav>
 
-            <!-- Título del Formulario -->
-            <h2 class="text-lg font-semibold text-gray-700">Configuración</h2>
+    <!-- Contenedor Principal con padding-top -->
+    <div class="pt-16 flex w-full"> <!-- Cambiado de mt-20 a pt-16 -->
+        <!-- Formulario de Configuración -->
+        <div class="w-1/4 bg-gray-100 p-4 rounded shadow-md">
+            <form id="form-configuracion" action="{{ route('configuracion.update', $certificado->id) }}" method="POST" class="space-y-4">
+                @csrf
+                @method('PUT')
 
-            <!-- Selección de Fuente -->
-            <div class="form-group">
-                <label for="fuente" class="block text-sm font-medium text-gray-700">Fuente:</label>
-                <select name="fuente" id="fuente" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
-                    <option value="Arial" {{ $configuracion->fuente == 'Arial' ? 'selected' : '' }}>Arial</option>
-                    <option value="Helvetica" {{ $configuracion->fuente == 'Helvetica' ? 'selected' : '' }}>Helvetica</option>
-                    <option value="Times" {{ $configuracion->fuente == 'Times' ? 'selected' : '' }}>Times New Roman</option>
-                    <option value="Georgia" {{ $configuracion->fuente == 'Georgia' ? 'selected' : '' }}>Georgia</option>
-                    <option value="Garamond" {{ $configuracion->fuente == 'Garamond' ? 'selected' : '' }}>Garamond</option>
-                    <option value="Brush Script MT" {{ $configuracion->fuente == 'Brush Script MT' ? 'selected' : '' }}>Brush Script MT</option>
-                    <option value="Palatino Linotype" {{ $configuracion->fuente == 'Palatino Linotype' ? 'selected' : '' }}>Palatino Linotype</option>
-                    <option value="Perpetua" {{ $configuracion->fuente == 'Perpetua' ? 'selected' : '' }}>Perpetua</option>
-                </select>
-            </div>
+                <!-- Título del Formulario -->
+                <h2 class="text-lg font-semibold text-gray-700">Configuración</h2>
 
-            <!-- Tamaño de Fuente -->
-            <div class="form-group">
-                <label for="tamaño_fuente" class="block text-sm font-medium text-gray-700">Tamaño:</label>
-                <input type="number" name="tamaño_fuente" id="tamaño_fuente" value="{{ $configuracion->tamaño_fuente }}" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300" min="8" max="72">
-            </div>
-
-            <!-- Botón para guardar cambios -->
-            <button type="submit" class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-400 focus:ring focus:ring-blue-300">
-                Guardar
-            </button>
-
-            <!-- Coordenadas ocultas -->
-            <input type="hidden" name="pos_x" id="input_pos_x" value="{{ $configuracion->pos_x }}">
-            <input type="hidden" name="pos_y" id="input_pos_y" value="{{ $configuracion->pos_y }}">
-        </form>
-    </div>
-
-    <!-- Contenedor del Certificado -->
-    <div class="w-3/4">
-        <div class="pdf-container relative">
-            <canvas id="pdf-render" class="border border-gray-300"></canvas> <!-- Certificado Renderizado -->
-            <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Dimensiones del PDF -->
-
-            <!-- Elementos Arrastrables -->
-            <div id="draggable-container" style="position: absolute; top: 0; left: 0;">
-                <div id="nombre" class="draggable" style="position: absolute; top: {{ $configuracion->pos_y }}px; left: {{ $configuracion->pos_x }}px; background-color: transparent; border: none;">
-                    N
+                <!-- Selección de Fuente -->
+                <div class="form-group">
+                    <label for="fuente" class="block text-sm font-medium text-gray-700">Fuente:</label>
+                    <select name="fuente" id="fuente" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
+                        <option value="Arial" {{ $configuracion->fuente == 'Arial' ? 'selected' : '' }}>Arial</option>
+                        <option value="Helvetica" {{ $configuracion->fuente == 'Helvetica' ? 'selected' : '' }}>Helvetica</option>
+                        <option value="Times" {{ $configuracion->fuente == 'Times' ? 'selected' : '' }}>Times New Roman</option>
+                        <option value="Georgia" {{ $configuracion->fuente == 'Georgia' ? 'selected' : '' }}>Georgia</option>
+                        <option value="Garamond" {{ $configuracion->fuente == 'Garamond' ? 'selected' : '' }}>Garamond</option>
+                        <option value="Brush Script MT" {{ $configuracion->fuente == 'Brush Script MT' ? 'selected' : '' }}>Brush Script MT</option>
+                        <option value="Palatino Linotype" {{ $configuracion->fuente == 'Palatino Linotype' ? 'selected' : '' }}>Palatino Linotype</option>
+                        <option value="Perpetua" {{ $configuracion->fuente == 'Perpetua' ? 'selected' : '' }}>Perpetua</option>
+                    </select>
                 </div>
+
+                <!-- Tamaño de Fuente -->
+                <div class="form-group">
+                    <label for="tamaño_fuente" class="block text-sm font-medium text-gray-700">Tamaño:</label>
+                    <input type="number" name="tamaño_fuente" id="tamaño_fuente" value="{{ $configuracion->tamaño_fuente }}" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300" min="8" max="72">
+                </div>
+
+                <!-- Botón para guardar cambios -->
+                <button type="submit" class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-400 focus:ring focus:ring-blue-300">
+                    Guardar
+                </button>
+
+                <!-- Coordenadas ocultas -->
+                <input type="hidden" name="pos_x" id="input_pos_x" value="{{ $configuracion->pos_x }}">
+                <input type="hidden" name="pos_y" id="input_pos_y" value="{{ $configuracion->pos_y }}">
+            </form>
+        </div>
+
+        <!-- Contenedor del Certificado -->
+        <div class="w-3/4">
+            <div class="pdf-container relative">
+                <canvas id="pdf-render" class="border border-gray-300"></canvas> <!-- Certificado Renderizado -->
+                <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Dimensiones del PDF -->
+
+                <!-- Elementos Arrastrables -->
+                <div id="draggable-container" style="position: absolute; top: 0; left: 0;">
+                    <div id="nombre" class="draggable" style="position: absolute; top: {{ $configuracion->pos_y }}px; left: {{ $configuracion->pos_x }}px; background-color: transparent; border: none;">
+                        N
+                    </div>
+                </div>
+                <p id="coords" class="text-center mt-2"></p> <!-- Mostrar Coordenadas -->
             </div>
-            <p id="coords" class="text-center mt-2"></p> <!-- Mostrar Coordenadas -->
         </div>
     </div>
 </div>
+
+
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>

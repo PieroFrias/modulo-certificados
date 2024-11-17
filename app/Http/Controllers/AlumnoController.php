@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Alumno;
 use App\Models\Curso;
+use App\Models\Certificado;
+
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AlumnoImport;
@@ -33,9 +35,10 @@ class AlumnoController extends Controller
     // Mostrar el formulario para crear un nuevo alumno
     public function create()
     {
-        $cursos = Curso::all(); // Obtener todos los cursos para el select
+        $cursos = Curso::where('estado', 1)->get(); // Obtener solo los cursos con estado 1
         return view('alumno.create', compact('cursos'));
     }
+
 
     // Almacenar un nuevo alumno
     public function store(Request $request)
@@ -61,7 +64,7 @@ class AlumnoController extends Controller
     public function edit($id)
     {
         $alumno = Alumno::findOrFail($id); // Obtener el alumno por ID
-        $cursos = Curso::all(); // Obtener todos los cursos para el select
+        $cursos = Curso::where('estado', 1)->get(); // Obtener solo los cursos con estado 1
         return view('alumno.edit', compact('alumno', 'cursos'));
     }
 
@@ -99,8 +102,12 @@ class AlumnoController extends Controller
     //ver pagina para importar alumnos
     public function show()
     {
-        return view('alumno.importaralumno');
+        $cursos = Curso::where('estado', 1)->get();
+        $certificados = Certificado::all();
+
+        return view('alumno.importaralumno', compact('cursos', 'certificados'));
     }
+
 
     // //ahora un metodo para importar alumnos
     // public function importar(Request $request)
@@ -123,23 +130,34 @@ class AlumnoController extends Controller
     //             }
 
     public function import(Request $request)
-{
-    $request->validate([
-        'file' => 'required|mimes:xlsx,xls,csv',
-    ]);
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+            'idcurso' => 'required|exists:curso,idcurso',
+        ]);
 
-    $file = $request->file('file');
-    $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME); // Nombre del archivo sin extensión
+        $file = $request->file('file');
+        $idCurso = $request->idcurso;
 
-    try {
-        // Importar los datos del Excel
-        Excel::import(new AlumnoImport($filename), $file);
+        try {
+            // Obtener el certificado asociado al curso
+            $curso = Curso::with('certificado')->findOrFail($idCurso);
 
-        return redirect()->route('alumno.index')->with('success', 'Alumnos importados correctamente.');
-    } catch (\Exception $e) {
-        return redirect()->route('alumno.index')->with('error', 'Error durante la importación: ' . $e->getMessage());
+            // Verificar si el curso tiene un certificado asociado
+            if (!$curso->certificado) {
+                return redirect()->route('alumno.index')->with('error', 'El curso seleccionado no tiene un certificado asociado.');
+            }
+
+            // Importar los datos del Excel
+            Excel::import(new AlumnoImport($idCurso), $file);
+
+            return redirect()->route('alumno.index')->with('success', 'Alumnos importados correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('alumno.index')->with('error', 'Error durante la importación: ' . $e->getMessage());
+        }
     }
-}
+
+
 
 public function descargarPlantilla()
 {

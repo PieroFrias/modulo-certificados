@@ -69,7 +69,7 @@
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->nombre }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->apellido }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->dni }}</td>
-                            <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->curso->nombre }}</td>
+                            <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->curso ? $alumno->curso->nombre : 'Sin Curso' }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->estado ? 'Activo' : 'Inactivo' }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6 text-center flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4">
                                 <a href="{{ route('alumno.edit', $alumno->id) }}" class="bg-yellow-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-yellow-600">Editar</a>

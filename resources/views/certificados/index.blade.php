@@ -1,19 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-center items-center min-h-screen"> <!-- Flexbox para centrar vertical y horizontalmente -->
+<div class="relative h-screen rounded-lg bg-gray-50">
+
+    <nav class="absolute top-4 left-4 px-6 text-sm text-gray-500">
+        <ol class="list-reset flex">
+            <li><a href="{{ route('inicio.index') }}" class="text-blue-500 hover:underline">Inicio</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-gray-700">Plantillas</li>
+        </ol>
+    </nav>
+
+
     <div class="bg-white shadow-md rounded-lg p-6 max-w-6xl w-full mx-auto">
-        <h1 class="text-4xl font-bold mb-6 text-center text-gray-800">Certificados Generados</h1>
+        <br>
+        <h1 class="text-4xl font-semibold mb-6 text-center text-gray-800">Plantillas de Certificados</h1>
 
-        <div class="flex justify-center mb-4"> <!-- Cambiado justify-start a justify-center -->
-            <a href="{{ route('certificados.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Crear Nuevo Certificado</a>
+        <div class="flex justify-start mb-4 space-x-2"> <!-- Justify-start para alinear a la izquierda y espacio entre botones -->
+            <a href="{{ route('certificados.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Subir Nuevo Certificado</a>
+            <a href="{{ route('configuracion.configuracioncertificado') }}" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">Personalizar Certificados</a>
         </div>
-
-         <!-- Nuevo botón para la configuración de certificados -->
-         <div class="flex justify-center mb-4">
-            <a href="{{ route('configuracion.configuracioncertificado') }}" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">Configurar Certificados</a>
-        </div>
-
 
 
         @if (session('success'))

@@ -11,20 +11,14 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class AlumnoImport implements ToModel, WithBatchInserts, WithHeadingRow
 {
-    protected $curso;
+    protected $idCurso;
     protected $importedDniNames; // Almacena combinaciones DNI + Nombre del archivo para evitar duplicados en el mismo archivo
 
-    // Constructor para recibir el nombre del archivo
-    public function __construct($filename)
+    // Constructor para recibir el ID del curso
+    public function __construct($idCurso)
     {
-        // Validar y crear/buscar el curso basado en el nombre del archivo
-        $this->curso = Curso::firstOrCreate(
-            ['nombre' => $filename], // Validar por el nombre del archivo
-            [
-                'descripcion' => 'Curso generado automáticamente',
-                'estado' => 1, // Curso activo por defecto
-            ]
-        );
+        // Asignar el curso directamente usando el ID proporcionado
+        $this->idCurso = $idCurso;
 
         // Inicializar el array para evitar duplicados en el archivo de importación
         $this->importedDniNames = [];
@@ -57,7 +51,7 @@ class AlumnoImport implements ToModel, WithBatchInserts, WithHeadingRow
 
         // Verificar si ya existe el DNI para el curso actual en la base de datos
         $existing = Alumno::where('dni', $dni)
-            ->where('idcurso', $this->curso->idcurso)
+            ->where('idcurso', $this->idCurso)
             ->exists();
 
         if ($existing) {
@@ -71,7 +65,7 @@ class AlumnoImport implements ToModel, WithBatchInserts, WithHeadingRow
             'nombre' => $nombre, // Nombre filtrado y en mayúsculas
             'apellido' => $apellido, // Apellido filtrado y en mayúsculas
             'dni' => $dni, // DNI filtrado
-            'idcurso' => $this->curso->idcurso, // Usar el ID del curso creado o encontrado
+            'idcurso' => $this->idCurso, // Usar el ID del curso proporcionado
             'created_at' => now(), // Fecha de creación
             'updated_at' => now(), // Fecha de actualización
         ]);
