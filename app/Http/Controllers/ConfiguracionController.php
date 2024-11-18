@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ConfiguracionController extends Controller
 {
     // Mostrar la lista de certificados con la opción de agregar o editar configuraciones
-    public function index()
+    public function show()
     {
         // Obtenemos todos los certificados con sus configuraciones
         $certificados = Certificado::with('configuracion')->get();
@@ -73,6 +73,14 @@ class ConfiguracionController extends Controller
         return redirect()->route('configuracion.configuracioncertificado')->with('success', 'Configuración actualizada correctamente.');
     }
 
+    public function index()
+    {
+        // Obtenemos todos los certificados con sus configuraciones
+        $certificados = Certificado::with('configuracion')->get();
+
+        // Retornar la vista con los datos de los certificados
+        return view('configuracion.configuracioncertificado', compact('certificados'));
+    }
 
 
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\AdminController;
@@ -7,36 +8,71 @@ use App\Http\Controllers\CursoController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', [AdminController::class, 'index']);
+
+
+// Rutas de login
+//pon la ruta de inicio en la raiz de login llamalo atravez de AuthController
+Route::get('/', [AuthController::class, 'index'])->name('login');
+
+
+
+
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// Ruta protegida (solo para usuarios autenticados)
+Route::middleware('auth')->group(function () {
+    Route::resources([
+        'inicio' => AdminController::class,
+        'certificados' => CertificadoController::class,
+        'curso' => CursoController::class,
+        'alumno' => AlumnoController::class,
+        'configuraciones' => ConfiguracionController::class,
+    ]);
+
+});
+
+// Ruta protegida para la vista de inicio de administrador con auth middleware
+Route::middleware('auth')->group(function () {
+    Route::get('/inicio', [AdminController::class, 'index'])->name('inicio.index')->middleware('auth');
+});
+// Route::get('/inicio', [AdminController::class, 'index'])->name('inicio.index');
+
+
+
+
 
 // Route::get('/', [CertificadoController::class, 'index']);
 
 
-Route::resource('certificados', CertificadoController::class);
+Route::resource('certificados', CertificadoController::class)->middleware('auth');
 //Ruta [certificados.view] para mostrar el certificado
 // Route::get('certificados/{id}/view', [CertificadoController::class, 'view'])->name('certificados.view');
 
 // ruta de create
-Route::get('certificados/create', [CertificadoController::class, 'create'])->name('certificados.create');
+Route::get('certificados/create', [CertificadoController::class, 'create'])->name('certificados.create')->middleware('auth');
 // ruta de store
-Route::post('certificados', [CertificadoController::class, 'store'])->name('certificados.store');
+Route::post('certificados', [CertificadoController::class, 'store'])->name('certificados.store')->middleware('auth');
 // ruta de show
-Route::get('certificados/{id}', [CertificadoController::class, 'show'])->name('certificados.view');
+Route::get('certificados/{id}', [CertificadoController::class, 'show'])->name('certificados.view')->middleware('auth');
 // ruta de edit
-Route::get('certificados/{id}/edit', [CertificadoController::class, 'edit'])->name('certificados.edit');
+Route::get('certificados/{id}/edit', [CertificadoController::class, 'edit'])->name('certificados.edit')->middleware('auth');
 // Ruta [certificados.download] para descargar el certificado
-Route::get('certificados/{id}/download', [CertificadoController::class, 'download'])->name('certificados.download');
+Route::get('certificados/{id}/download', [CertificadoController::class, 'download'])->name('certificados.download')->middleware('auth');
 // Ruta [certificados.generate] para generar el certificado
-Route::get('certificados/{id}/generate', [CertificadoController::class, 'generate'])->name('certificados.generate');
+Route::get('certificados/{id}/generate', [CertificadoController::class, 'generate'])->name('certificados.generate')->middleware('auth');
 // Ruta [certificados.send] para enviar el certificado por correo
-Route::get('certificados/{id}/send', [CertificadoController::class, 'send'])->name('certificados.send');
+Route::get('certificados/{id}/send', [CertificadoController::class, 'send'])->name('certificados.send')->middleware('auth');
 // Ruta [certificados.print] para imprimir el certificado
-Route::get('certificados/{id}/print', [CertificadoController::class, 'print'])->name('certificados.print');
+Route::get('certificados/{id}/print', [CertificadoController::class, 'print'])->name('certificados.print')->middleware('auth');
 // Ruta [certificados.delete] para eliminar el certificado
-Route::delete('certificados/{id}', [CertificadoController::class, 'destroy'])->name('certificados.delete');
+Route::delete('certificados/{id}', [CertificadoController::class, 'destroy'])->name('certificados.delete')->middleware('auth');
 // Ruta [certificados.delete] para eliminar el certificado
-Route::get('certificados/{id}/delete', [CertificadoController::class, 'delete'])->name('certificados.delete');
+Route::get('certificados/{id}/delete', [CertificadoController::class, 'delete'])->name('certificados.delete')->middleware('auth');
 
 
 
@@ -44,33 +80,57 @@ Route::get('certificados/{id}/delete', [CertificadoController::class, 'delete'])
 
 
 // RUTA PARA CURSOS ------------------------------------------------------------------------
-Route::resource('curso', CursoController::class);
+Route::resource('curso', CursoController::class)->middleware('auth');
 // Ruta para crear un nuevo curso
-Route::get('curso/create', [CursoController::class, 'create'])->name('curso.create');
+Route::get('curso/create', [CursoController::class, 'create'])->name('curso.create')->middleware('auth');
 // Ruta para almacenar un nuevo curso
-Route::post('curso', [CursoController::class, 'store'])->name('curso.store');
+Route::post('curso', [CursoController::class, 'store'])->name('curso.store')->middleware('auth');
 // Ruta para mostrar un curso específico
-Route::get('curso/{id}', [CursoController::class, 'show'])->name('curso.view');
+Route::get('curso/{id}', [CursoController::class, 'show'])->name('curso.view')->middleware('auth');
 // Ruta para editar un curso
-Route::get('curso/{id}/edit', [CursoController::class, 'edit'])->name('curso.edit');
+Route::get('curso/{id}/edit', [CursoController::class, 'edit'])->name('curso.edit')->middleware('auth');
 // Ruta para actualizar un curso
-Route::put('curso/{id}', [CursoController::class, 'update'])->name('curso.update');
+Route::put('curso/{id}', [CursoController::class, 'update'])->name('curso.update')->middleware('auth');
 // Ruta para eliminar un curso
-Route::delete('curso/{id}', [CursoController::class, 'destroy'])->name('curso.delete');
+Route::delete('curso/{id}', [CursoController::class, 'destroy'])->name('curso.delete')->middleware('auth');
+
+Route::get('/curso/{idcurso}/alumnos', [CursoController::class, 'alumnos'])->name('curso.alumnos')->middleware('auth');
+
+// Route::get('/curso/{idcurso}/certificados/masivos', [CursoController::class, 'generarCertificadosMasivos'])->name('curso.generar_certificados_masivos');
+Route::get('/curso/{idcurso}/certificado/{idalumno}', [CursoController::class, 'generarCertificado'])->name('curso.generar_certificado')->middleware('auth');
+
+Route::get('/curso/{idcurso}/certificados/masivos', [CursoController::class, 'generarCertificadosMasivos'])->name('curso.generar_certificados_masivos')->middleware('auth');
+
+
 
 
 // RUTA PARA ALUMNOS ------------------------------------------------------------------------
-Route::resource('alumno', AlumnoController::class);
+Route::resource('alumno', AlumnoController::class)->middleware('auth');
 // Ruta para crear un nuevo alumno
-Route::get('alumno/create', [AlumnoController::class, 'create'])->name('alumno.create');
+Route::get('alumno/create', [AlumnoController::class, 'create'])->name('alumno.create')->middleware('auth');
 // Ruta para almacenar un nuevo alumno
-Route::post('alumno', [AlumnoController::class, 'store'])->name('alumno.store');
+Route::post('alumno', [AlumnoController::class, 'store'])->name('alumno.store')->middleware('auth');
 // Ruta para editar un alumno
-Route::get('alumno/{id}/edit', [AlumnoController::class, 'edit'])->name('alumno.edit');
+Route::get('alumno/{id}/edit', [AlumnoController::class, 'edit'])->name('alumno.edit')->middleware('auth');
 // Ruta para actualizar un alumno
-Route::put('alumno/{id}', [AlumnoController::class, 'update'])->name('alumno.update');
+Route::put('alumno/{id}', [AlumnoController::class, 'update'])->name('alumno.update')->middleware('auth');
 // Ruta para eliminar un alumno
-Route::delete('alumno/{id}', [AlumnoController::class, 'destroy'])->name('alumno.delete');
+Route::delete('alumno/{id}', [AlumnoController::class, 'destroy'])->name('alumno.delete')->middleware('auth');
+
+//ruta para importar alumnos
+Route::get('alumno/import', [AlumnoController::class, 'import'])->name('alumno.import')->middleware('auth');
+
+// Route::get('/alumno/{id}', [AlumnoController::class, 'show'])->name('alumno.show');
+
+Route::get('/alumno/importar', function () {return view('importaralumno');})->name('alumno.importar')->middleware('auth');
+
+Route::post('/alumno/importar', [AlumnoController::class, 'import'])->name('alumno.importar')->middleware('auth');
+
+Route::get('/alumno/plantilla', [AlumnoController::class, 'descargarPlantilla'])->name('alumno.plantilla')->middleware('auth');
+
+
+
+
 
 
 
@@ -83,13 +143,12 @@ Route::get('consulta/{id}', [ConsultaController::class, 'viewCertificado'])->nam
 
 
 // RUTA PARA CONFIGURACIONES DE CERTIFICADOS
-// Route::resource('configuraciones', ConfiguracionController::class);
-// RUTA PARA CONFIGURACIONES DE CERTIFICADOS
-Route::get('configuraciones/configuracioncertificado', [ConfiguracionController::class, 'index'])->name('configuracion.configuracioncertificado');
-Route::get('configuraciones/{idcertificado}/edit', [ConfiguracionController::class, 'edit'])->name('configuracion.editarconfiguracion');
-Route::put('configuraciones/{idcertificado}', [ConfiguracionController::class, 'update'])->name('configuracion.update');
+Route::resource('configuraciones', ConfiguracionController::class)->middleware('auth')->middleware('auth');
+Route::get('configuraciones/configuracioncertificado', [ConfiguracionController::class, 'index'])->name('configuracion.configuracioncertificado')->middleware('auth');
+Route::get('configuraciones/{idcertificado}/edit', [ConfiguracionController::class, 'edit'])->name('configuracion.editarconfiguracion')->middleware('auth');
+Route::put('configuraciones/{idcertificado}', [ConfiguracionController::class, 'update'])->name('configuracion.update')->middleware('auth');
 
 
 
-
+// RUTA PARA ADMINISTRADOR LOGIN ------------------------------------------------------------------------
 

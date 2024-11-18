@@ -1,8 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4">
-    <h1 class="text-4xl font-bold mb-6 text-center">Configuración de Certificados</h1>
+<div class="relative h-screen rounded-lg bg-gray-50">
+
+    <nav class="absolute top-4 left-4 px-6 text-sm text-gray-500">
+        <ol class="list-reset flex">
+            <li><a href="{{ route('inicio.index') }}" class="text-blue-500 hover:underline">Inicio</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="{{ route('certificados.index') }}" class="text-blue-500 hover:underline">Plantillas</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-gray-700">Personalizar Plantilla</li>
+        </ol>
+    </nav>
+
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full mx-auto">
+    <h1 class="text-4xl font-semibold mb-6 text-center">Configuración de Certificados</h1>
 
     <!-- Muestra los mensajes de éxito -->
     @if(session('success'))
@@ -40,5 +52,6 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>
 @endsection
