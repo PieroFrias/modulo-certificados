@@ -39,6 +39,7 @@ public function store(Request $request)
         'nombre' => 'required|string|max:255',
         'estado' => 'required|boolean',
         'idcertificado' => 'required|exists:certificados,id', // Validar que el idcertificado exista en la tabla 'certificados'
+        'hora' => 'required|integer|min:0', // Validación para hora (de 0 a 23)
     ]);
 
     // Crear un nuevo registro en la base de datos
@@ -46,6 +47,7 @@ public function store(Request $request)
         'nombre' => $validated['nombre'],
         'estado' => $validated['estado'],
         'idcertificado' => $validated['idcertificado'], // Almacenar la relación con el certificado
+        'hora' => $validated['hora'], // Guardar la hora
     ]);
 
     // Redirigir a la lista de cursos con un mensaje de éxito
@@ -74,6 +76,7 @@ public function store(Request $request)
                'nombre' => 'required|string|max:255',
                'estado' => 'required|boolean',
                'idcertificado' => 'required|exists:certificados,id',
+               'hora' => 'required|integer|min:0', // Validación para hora
            ]);
 
            $curso = Curso::findOrFail($id);
@@ -81,6 +84,7 @@ public function store(Request $request)
                'nombre' => $validated['nombre'],
                'estado' => $validated['estado'],
                'idcertificado' => $validated['idcertificado'],
+               'hora' => $validated['hora'], // Actualizar la hora
            ]);
 
            return redirect()->route('curso.index')->with('success', 'Curso actualizado correctamente.');

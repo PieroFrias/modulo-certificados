@@ -64,6 +64,14 @@
                     </select>
                 </div>
 
+                <div>
+                    <label for="hora" class="block text-sm font-medium text-gray-700 mb-1">Duracion en Horas del Evento - Curso</label>
+                    <input type="number" name="hora" id="hora" min="0"  value="{{ old('hora', $curso->hora) }}"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-gray-700"
+                        placeholder="Ingrese las horas" required>
+                </div>
+
+
                 <!-- Estado -->
                 <div class="relative mb-6">
                     <label for="estado" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>

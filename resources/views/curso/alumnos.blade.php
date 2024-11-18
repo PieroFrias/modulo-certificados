@@ -48,6 +48,7 @@
                         <th class="py-4 px-6 text-left">Nombre</th>
                         <th class="py-4 px-6 text-left">Apellido</th>
                         <th class="py-4 px-6 text-left">DNI</th>
+                        <th class="py-4 px-6 text-left">Correo</th>
                         <th class="py-4 px-6 text-left">Estado</th>
                         <th class="py-4 px-6 text-center">Acciones</th>
                     </tr>
@@ -59,6 +60,7 @@
                         <td class="py-4 px-6">{{ $alumno->nombre }}</td>
                         <td class="py-4 px-6">{{ $alumno->apellido }}</td>
                         <td class="py-4 px-6">{{ $alumno->dni }}</td>
+                        <td class="py-4 px-6">{{ $alumno->correo }}</td>
                         <td class="py-4 px-6">{{ $alumno->estado ? 'Activo' : 'Inactivo' }}</td>
                         <td class="py-4 px-6 text-center flex justify-center items-center gap-4">
                             <!-- Generar Certificado -->

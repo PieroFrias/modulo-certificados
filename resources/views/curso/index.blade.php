@@ -38,6 +38,7 @@
                         <th class="py-4 px-6 text-left">ID</th>
                         <th class="py-4 px-6 text-left">Nombre</th>
                         <th class="py-4 px-6 text-left">Certificado</th>
+                        <th class="py-4 px-6 text-left">Duración/Horas</th> <!-- Nueva columna -->
                         <th class="py-4 px-6 text-left">Estado</th>
                         <th class="py-4 px-6 text-center">Acciones</th>
                     </tr>
@@ -48,6 +49,7 @@
                         <td class="py-4 px-6">{{ $curso->idcurso }}</td>
                         <td class="py-4 px-6">{{ $curso->nombre }}</td>
                         <td class="py-4 px-6">{{ $curso->certificado->nombre ?? 'No asignado' }}</td>
+                        <td class="py-4 px-6">{{ $curso->hora }} : 00</td> <!-- Mostrar la hora -->
                         <td class="py-4 px-6">
                             <span class="px-4 py-1 rounded-full text-white text-sm font-semibold
                                 {{ $curso->estado ? 'bg-yellow-300' : 'bg-red-500' }}">

@@ -55,9 +55,15 @@
                     <label for="email" class="block text-sm font-medium text-gray-800">Correo electrónico</label>
                     <input type="email" id="email" name="email" class="w-full p-3 mt-2 rounded bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:ring-blue-500">
                 </div>
-                <div class="mb-6">
+                <div class="mb-6 relative">
                     <label for="password" class="block text-sm font-medium text-gray-800">Contraseña</label>
                     <input type="password" id="password" name="password" class="w-full p-3 mt-2 rounded bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:ring-blue-500">
+                    <!-- Botón para ver u ocultar contraseña -->
+                    <button type="button"
+                        onclick="togglePasswordVisibility('password')"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600">
+                        👁️
+                    </button>
                 </div>
                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-400 text-white py-3 px-4 rounded-lg font-semibold">
                     Iniciar sesión
@@ -89,6 +95,17 @@
         // Establecer el fondo inicial
         changeBackground();
     </script>
+
+<script>
+    function togglePasswordVisibility(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field.type === 'password') {
+            field.type = 'text';
+        } else {
+            field.type = 'password';
+        }
+    }
+</script>
 
 </body>
 </html>

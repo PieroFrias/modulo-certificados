@@ -37,6 +37,14 @@
             </div>
 
             <div>
+                <label for="correo" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+                <input type="email" name="correo" id="correo"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    placeholder="Ingrese el correo del alumno" required>
+            </div>
+
+
+            <div>
                 <label for="idcurso" class="block text-sm font-medium text-gray-700">Curso</label>
                 <select name="idcurso" id="idcurso" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                     <option value="" disabled selected>Seleccione un Curso</option>

@@ -11,6 +11,7 @@ use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\AuthController;
 
 
+
 // Rutas de login
 //pon la ruta de inicio en la raiz de login llamalo atravez de AuthController
 Route::get('/', [AuthController::class, 'index'])->name('login');

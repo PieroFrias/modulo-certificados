@@ -11,14 +11,14 @@ class Curso extends Model
 
     protected $table = 'curso';
     protected $primaryKey = 'idcurso';
-    protected $fillable = ['nombre', 'estado', 'idcertificado'];
+    protected $fillable = ['nombre', 'estado', 'idcertificado', 'hora'];
 
     // Relación con el modelo Certificado
     public function certificado()
     {
         return $this->belongsTo(Certificado::class, 'idcertificado', 'id');
     }
-    
+
 
     // Relación con el modelo Alumno
     public function alumnos()

@@ -31,45 +31,65 @@ class AlumnoImport implements ToModel, WithBatchInserts, WithHeadingRow
      */
     public function model(array $row)
     {
-        // Filtrar solo letras (A-Z, a-z) para las celdas 1 (nombre) y 2 (apellido), y convertir a mayúsculas
-        $nombre = strtoupper(preg_replace('/[^a-zA-Z\s]/', '', trim($row[1]))); // Solo letras y espacios en mayúsculas
-        $apellido = strtoupper(preg_replace('/[^a-zA-Z\s]/', '', trim($row[2]))); // Solo letras y espacios en mayúsculas
-
-        // Filtrar solo números para la celda 5 (DNI)
+        // Filtrar y formatear los datos
+        // Permitir letras con tildes y espacios (regex actualizado)
+        $nombre = mb_strtoupper(preg_replace('/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/u', '', trim($row[1])), 'UTF-8'); // Convertir a mayúsculas incluyendo tildes
+        $apellido = mb_strtoupper(preg_replace('/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/u', '', trim($row[2])), 'UTF-8'); // Convertir a mayúsculas incluyendo tildes
         $dni = preg_replace('/\D/', '', trim($row[5])); // Solo números
+        $correo = filter_var(trim($row[6]), FILTER_SANITIZE_EMAIL); // Filtrar correo
 
-        // Verificar si nombre, apellido o DNI están vacíos después del filtro
-        if (empty($nombre) || empty($apellido) || empty($dni)) {
-            return null; // Saltar registro si algún campo esencial está vacío
+        // Validar si los campos esenciales están vacíos o el correo es inválido
+        if (empty($dni) || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            return null; // Saltar el registro si el DNI es inválido o el correo no es válido
         }
 
-        // Generar la clave compuesta para evitar duplicados en el archivo
-        $dniNameKey = $dni . '|' . $nombre . ' ' . $apellido;
-        if (in_array($dniNameKey, $this->importedDniNames)) {
-            return null; // Saltar registro duplicado en el archivo
-        }
-
-        // Verificar si ya existe el DNI para el curso actual en la base de datos
-        $existing = Alumno::where('dni', $dni)
+        // Buscar si el registro ya existe en la base de datos
+        $existingAlumno = Alumno::where('dni', $dni)
             ->where('idcurso', $this->idCurso)
-            ->exists();
+            ->first();
 
-        if ($existing) {
-            return null; // Saltar si el DNI ya existe para este curso
+        if ($existingAlumno) {
+            // Revisar si los datos han cambiado
+            $hasChanges = false;
+
+            if ($existingAlumno->nombre !== $nombre) {
+                $existingAlumno->nombre = $nombre;
+                $hasChanges = true;
+            }
+
+            if ($existingAlumno->apellido !== $apellido) {
+                $existingAlumno->apellido = $apellido;
+                $hasChanges = true;
+            }
+
+            if ($existingAlumno->correo !== $correo) {
+                $existingAlumno->correo = $correo;
+                $hasChanges = true;
+            }
+
+            if ($hasChanges) {
+                $existingAlumno->updated_at = now(); // Actualizar la fecha de modificación solo si hubo cambios
+                $existingAlumno->save();
+            }
+
+            return null; // No crear un nuevo registro, solo actualizar el existente si hubo cambios
         }
 
-        // Marcar como procesado para evitar duplicados en este archivo
-        $this->importedDniNames[] = $dniNameKey;
-
+        // Si el registro no existe, crear uno nuevo
         return new Alumno([
             'nombre' => $nombre, // Nombre filtrado y en mayúsculas
             'apellido' => $apellido, // Apellido filtrado y en mayúsculas
             'dni' => $dni, // DNI filtrado
+            'correo' => $correo, // Guardar el correo
             'idcurso' => $this->idCurso, // Usar el ID del curso proporcionado
             'created_at' => now(), // Fecha de creación
             'updated_at' => now(), // Fecha de actualización
         ]);
     }
+
+
+
+
 
     /**
      * Límite de filas para la inserción por lote (mejora rendimiento).

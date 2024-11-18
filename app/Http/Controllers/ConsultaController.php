@@ -17,23 +17,44 @@ class ConsultaController extends Controller
         if ($request->has('dni')) {
             // Validar el DNI ingresado (asumiendo que tiene 8 dígitos)
             $request->validate([
-                'dni' => 'required|numeric|max_digits:15',
+                'dni' => 'nullable|numeric|max_digits:15',
+                'correo' => 'nullable|email',
             ], [
-                'dni.required' => 'El campo DNI es obligatorio.',
                 'dni.numeric' => 'El DNI solo puede contener números.',
                 'dni.max_digits' => 'El DNI no puede tener más de 15 dígitos.',
+                'correo.email' => 'El formato del correo no es válido.',
             ]);
 
             // Mostrar el valor del DNI recibido para depuración
             Log::info("DNI recibido: " . $request->dni);
 
             // Buscar todos los alumnos relacionados al DNI
-            $alumnos = Alumno::with('curso.certificado')
-    ->where('dni', $request->dni)
-    ->whereHas('curso', function ($query) {
-        $query->where('estado', 1); // Filtrar solo cursos con estado = 1
-    })
-    ->get();
+            // Búsqueda por DNI
+    if ($request->filled('dni')) {
+        $alumnos = Alumno::with('curso.certificado')
+            ->where('dni', $request->dni)
+            ->whereHas('curso', function ($query) {
+                $query->where('estado', 1); // Filtrar solo cursos con estado = 1
+            })
+            ->get();
+    }
+
+    // Búsqueda por correo
+    if ($request->filled('correo')) {
+        $alumnos = Alumno::with('curso.certificado')
+            ->where('correo', $request->correo)
+            ->whereHas('curso', function ($query) {
+                $query->where('estado', 1); // Filtrar solo cursos con estado = 1
+            })
+            ->get();
+    }
+
+    // Validar si se encontraron resultados
+    if ($request->has('dni') || $request->has('correo')) {
+        if (!$alumnos || $alumnos->isEmpty()) {
+            return redirect()->route('consulta.index')->with('error', 'No se encontraron resultados para la búsqueda realizada.');
+        }
+    }
 
 
 

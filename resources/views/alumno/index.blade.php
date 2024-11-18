@@ -1,8 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-center items-center min-h-screen">
-    <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 max-w-6xl w-full mx-auto">
+<div class="relative h-screen rounded-lg bg-gray-50">
+
+    <nav class="absolute top-0 left-0 px-6 py-4 text-sm text-gray-500 z-10 bg-gray-50 w-full">
+        <ol class="list-reset flex">
+            <li><a href="{{ route('inicio.index') }}" class="text-blue-500 hover:underline">Inicio</a></li>
+            <li><span class="mx-2">/</span></li>
+            {{-- <li><a href="{{ route('certificados.index') }}" class="text-blue-500 hover:underline">Plantillas</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="{{ route('configuracion.configuracioncertificado') }}" class="text-blue-500 hover:underline">Personalisar Plantilla</a></li>
+            <li><span class="mx-2">/</span></li> --}}
+            <li class="text-gray-700">Personas</li>
+        </ol>
+    </nav>
+
+    <div class="bg-white shadow-md rounded-lg p-6 max-w-6xl w-full mx-auto">
         <h1 class="text-2xl sm:text-4xl font-bold mb-6 text-center text-gray-800">Lista de Alumnos</h1>
 
         <div class="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-4 sm:space-y-0">
@@ -57,6 +70,7 @@
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Nombre</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Apellido</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">DNI</th>
+                            <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Correo</th> <!-- Nueva columna -->
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Curso</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Estado</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-center">Acciones</th>
@@ -69,6 +83,7 @@
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->nombre }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->apellido }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->dni }}</td>
+                            <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->correo  ?? 'No asignado' }}</td> <!-- Mostrar correo -->
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->curso ? $alumno->curso->nombre : 'Sin Curso' }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->estado ? 'Activo' : 'Inactivo' }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6 text-center flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4">
