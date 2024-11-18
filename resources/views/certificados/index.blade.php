@@ -34,7 +34,7 @@
                 <table class="min-w-full w-full bg-white border border-gray-300">
                     <thead class="bg-gray-200 text-gray-600 uppercase text-xs sm:text-sm">
                         <tr>
-                            <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Identificación</th>
+                            {{-- <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Identificación</th> --}}
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Nombre</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-left">Fecha</th>
                             <th class="py-2 px-2 sm:py-3 sm:px-6 text-center">Acciones</th>
@@ -43,10 +43,11 @@
                     <tbody class="text-gray-700 text-xs sm:text-sm">
                         @foreach($certificados as $certificado)
                         <tr class="border-b hover:bg-gray-100">
-                            <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->id }}</td>
+                            {{-- <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->id }}</td> --}}
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->nombre }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->created_at->format('d/m/Y') }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6 text-center flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                                <a href="{{ route('configuracion.editarconfiguracion', $certificado->id) }}" class="bg-purple-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-purple-600 text-xs sm:text-sm">Personalizar</a>
                                 <a href="{{ route('certificados.view', $certificado->id) }}" class="bg-blue-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-blue-600 text-xs sm:text-sm">Ver</a>
                                 <a href="{{ route('certificados.edit', $certificado->id) }}" class="bg-yellow-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-yellow-600 text-xs sm:text-sm">Editar</a>
                                 <form action="{{ route('certificados.destroy', $certificado->id) }}" method="POST" class="inline">
