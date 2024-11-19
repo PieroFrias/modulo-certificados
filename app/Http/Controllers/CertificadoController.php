@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Certificado;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
 
 
 class CertificadoController extends Controller
@@ -22,49 +24,64 @@ class CertificadoController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // Validar el formulario
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'template' => 'required|mimes:pdf|max:10240', // El archivo debe ser PDF y no exceder 10MB
-        ]);
+{
+    // Validar el formulario
+    $validated = $request->validate([
+        'nombre' => 'required|string|max:255',
+        'template' => 'required|mimes:pdf|max:10240', // El archivo debe ser PDF y no exceder 10MB
+    ]);
 
-        // Verificar si el archivo fue cargado correctamente
-        if ($request->hasFile('template')) {
-            try {
-                $file = $request->file('template');
+    // Verificar si el archivo fue cargado correctamente
+    if ($request->hasFile('template')) {
+        try {
+            $file = $request->file('template');
 
-                // Obtener el nombre original del archivo
-                $filename = $file->getClientOriginalName();
+            // Usar FPDI para verificar las dimensiones del PDF
+            $pdf = new Fpdi();
+            $pdf->setSourceFile(StreamReader::createByFile($file->getPathname()));
+            $pageId = $pdf->importPage(1); // Verificar la primera página
+            $size = $pdf->getTemplateSize($pageId);
 
-                // Guardar el archivo en la carpeta 'certificados' dentro de 'storage/app/public/certificados'
-                $filePath = $file->storeAs('certificados', $filename, 'public'); // Corregido para usar 'public'
+            // Dimensiones en milímetros
+            $width = $size['width'];
+            $height = $size['height'];
 
-                // Verificar si el archivo se guardó correctamente
-                if (!$filePath) {
-                    return redirect()->back()->with('error', 'No se pudo guardar el archivo.');
-                }
-
-                // Crear un nuevo registro en la base de datos con el nombre del archivo PDF
-                $certificado = new Certificado();
-                $certificado->nombre = $request->nombre;
-                $certificado->template = $filename;  // Solo guardamos el nombre del archivo en la base de datos
-                $certificado->fecha = now(); // Asignar la fecha actual
-                $certificado->save();
-
-                // Redirigir con un mensaje de éxito
-                return redirect()->route('certificados.index')->with('success', 'Certificado creado correctamente.');
-
-            } catch (\Exception $e) {
-                // En caso de error, lo registramos y redirigimos con un mensaje de error
-                Log::error('Error al guardar el certificado: ' . $e->getMessage());
-                return redirect()->back()->with('error', 'Hubo un problema al guardar el certificado. Por favor, inténtelo nuevamente.');
+            // Validar que las dimensiones sean al menos A4
+            if ($width < 210 || $height < 297) {
+                return redirect()->back()->withErrors(['template' => 'El tamaño del PDF debe ser al menos A4: 210 mm x 297 mm.']);
             }
-        } else {
-            // En caso de que no se haya subido el archivo correctamente
-            return redirect()->back()->with('error', 'No se pudo cargar el archivo.');
+
+            // Obtener el nombre original del archivo
+            $filename = $file->getClientOriginalName();
+
+            // Guardar el archivo en la carpeta 'certificados' dentro de 'storage/app/public/certificados'
+            $filePath = $file->storeAs('certificados', $filename, 'public'); // Corregido para usar 'public'
+
+            // Verificar si el archivo se guardó correctamente
+            if (!$filePath) {
+                return redirect()->back()->with('error', 'No se pudo guardar el archivo.');
+            }
+
+            // Crear un nuevo registro en la base de datos con el nombre del archivo PDF
+            $certificado = new Certificado();
+            $certificado->nombre = $request->nombre;
+            $certificado->template = $filename;  // Solo guardamos el nombre del archivo en la base de datos
+            $certificado->fecha = now(); // Asignar la fecha actual
+            $certificado->save();
+
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('certificados.index')->with('success', 'Certificado creado correctamente.');
+
+        } catch (\Exception $e) {
+            // En caso de error, lo registramos y redirigimos con un mensaje de error
+            Log::error('Error al guardar el certificado: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['template' => 'Hubo un problema al procesar el PDF.']);
         }
+    } else {
+        // En caso de que no se haya subido el archivo correctamente
+        return redirect()->back()->withErrors(['template' => 'No se pudo cargar el archivo.']);
     }
+}
 
     // Método edit para mostrar el formulario de edición
     public function edit($id)
@@ -91,14 +108,36 @@ class CertificadoController extends Controller
         if ($request->hasFile('template')) {
             $file = $request->file('template');
 
-            // Obtener el nombre original del archivo
-            $filename = $file->getClientOriginalName();
+            try {
+                // Usar FPDI para verificar las dimensiones del PDF
+                $pdf = new Fpdi();
+                $pdf->setSourceFile(StreamReader::createByFile($file->getPathname()));
+                $pageId = $pdf->importPage(1); // Verificar la primera página
+                $size = $pdf->getTemplateSize($pageId);
 
-            // Guardar el archivo en la carpeta 'certificados'
-            $filePath = Storage::putFileAs('certificados', $file, $filename);
+                // Dimensiones en milímetros
+                $width = $size['width'];
+                $height = $size['height'];
 
-            // Actualizar el nombre del archivo en la base de datos
-            $certificado->template = $filename;
+                // Validar que las dimensiones sean al menos A4
+                if ($width < 210 || $height < 297) {
+                    return redirect()->back()->withErrors(['template' => 'El tamaño del PDF debe ser al menos A4: 210 mm x 297 mm.']);
+                }
+
+                // Obtener el nombre original del archivo
+                $filename = $file->getClientOriginalName();
+
+                // Guardar el archivo en la carpeta 'certificados'
+                $filePath = Storage::putFileAs('certificados', $file, $filename);
+
+                // Actualizar el nombre del archivo en la base de datos
+                $certificado->template = $filename;
+
+            } catch (\Exception $e) {
+                // En caso de error, lo registramos y redirigimos con un mensaje de error
+                Log::error('Error al verificar o guardar el archivo PDF: ' . $e->getMessage());
+                return redirect()->back()->withErrors(['template' => 'Hubo un problema al procesar el PDF.']);
+            }
         }
 
         // Actualizar el nombre del certificado
