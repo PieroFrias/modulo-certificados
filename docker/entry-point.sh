@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env
 
 chown -R www-data:www-data /var/www/app \
     && chmod -R 775 /var/www/app/storage
