@@ -12,6 +12,7 @@
     </nav>
 
     <div class="bg-white shadow-lg rounded-lg p-8 w-full mx-auto">
+        <br>
         <h1 class="text-4xl font-semibold mb-8 text-center text-gray-800">Eventos / cursos</h1>
 
         <div class="flex justify-start mb-6">
