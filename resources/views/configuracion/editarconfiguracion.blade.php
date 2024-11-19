@@ -9,8 +9,8 @@
             <li><span class="mx-2">/</span></li>
             <li><a href="{{ route('certificados.index') }}" class="text-blue-500 hover:underline">Plantillas</a></li>
             <li><span class="mx-2">/</span></li>
-            <li><a href="{{ route('configuracion.configuracioncertificado') }}" class="text-blue-500 hover:underline">Personalisar Plantilla</a></li>
-            <li><span class="mx-2">/</span></li>
+            {{-- <li><a href="{{ route('configuracion.configuracioncertificado') }}" class="text-blue-500 hover:underline">Personalisar Plantilla</a></li>
+            <li><span class="mx-2">/</span></li> --}}
             <li class="text-gray-700">Plantilla</li>
         </ol>
     </nav>

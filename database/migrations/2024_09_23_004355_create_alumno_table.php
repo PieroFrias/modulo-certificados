@@ -17,10 +17,11 @@ class CreateAlumnoTable extends Migration
             $table->id(); // Llave primaria
             $table->string('nombre', 255); // Columna para el nombre del alumno
             $table->string('apellido', 255); // Columna para el apellido del alumno
-            $table->string('dni', 8)->unique(); // Columna para el DNI (8 caracteres, único)
+            $table->string('dni', 15); // Columna para el DNI (máximo 15 caracteres, sin unique)
+            $table->string('correo', 255)->unique(); // Columna para el correo (debe ser único)
             $table->unsignedBigInteger('idcurso'); // Relación con la tabla 'curso'
-            $table->foreign('idcurso')->references('idcurso')->on('curso')->onDelete('cascade'); // Llave foránea con 'curso'
-            $table->boolean('estado')->default(true); // Columna para el estado (activo/inactivo)
+            $table->foreign('idcurso')->references('idcurso')->on('curso')->onDelete('restrict')->onUpdate('restrict'); // Llave foránea con restricciones
+            $table->boolean('estado')->default(1); // Columna para el estado (activo/inactivo)
             $table->timestamps(); // Columnas created_at y updated_at
         });
     }

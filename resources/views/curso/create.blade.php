@@ -18,14 +18,14 @@
      <div class="flex justify-center items-center h-full">
         <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md mx-auto">
 
-        <div class="flex justify-start mb-4">
+        {{-- <div class="flex justify-start mb-4">
             <!-- Botón con ícono dentro de un círculo -->
             <a href="{{ route('curso.index') }}" class="bg-blue-500 text-white rounded-full p-3 shadow-md hover:bg-blue-600 transition duration-200 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5l-6-6m0 0l6-6m-6 6h15" />
                 </svg>
             </a>
-        </div>
+        </div> --}}
 
 
         <h1 class="text-3xl font-semibold text-center text-gray-800 mb-8">Crear Nuevo Evento - Curso</h1>

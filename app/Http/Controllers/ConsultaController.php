@@ -39,15 +39,17 @@ class ConsultaController extends Controller
             ->get();
     }
 
-    // Búsqueda por correo
-    if ($request->filled('correo')) {
-        $alumnos = Alumno::with('curso.certificado')
-            ->where('correo', $request->correo)
-            ->whereHas('curso', function ($query) {
-                $query->where('estado', 1); // Filtrar solo cursos con estado = 1
-            })
-            ->get();
-    }
+   // Búsqueda por correo
+if ($request->filled('correo')) {
+    $alumnos = Alumno::with('curso.certificado')
+        ->where('correo', $request->correo)
+        ->where('estado', 1) // Filtrar alumnos con estado = 1
+        ->whereHas('curso', function ($query) {
+            $query->where('estado', 1); // Filtrar solo cursos con estado = 1
+        })
+        ->get();
+}
+
 
     // Validar si se encontraron resultados
     if ($request->has('dni') || $request->has('correo')) {
