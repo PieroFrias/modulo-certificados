@@ -19,14 +19,14 @@
         <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md mx-auto">
 
 
-            <!-- Botón de regresar con solo un ícono -->
+            {{-- <!-- Botón de regresar con solo un ícono -->
             <div class="flex justify-start mb-6">
                 <a href="{{ route('curso.index') }}" class="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 shadow-md transition duration-200 transform hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5l-6-6m0 0l6-6m-6 6h15" />
                     </svg>
                 </a>
-            </div>
+            </div> --}}
 
             <h1 class="text-3xl font-semibold text-center text-gray-800 mb-8">Editar Evento - Curso</h1>
 

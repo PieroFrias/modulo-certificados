@@ -14,15 +14,15 @@ class CreateCursoTable extends Migration
     public function up()
     {
         Schema::create('curso', function (Blueprint $table) {
-            // Columnas de la tabla
-            $table->id('idcurso'); // Llave primaria llamada 'idcurso'
-            $table->unsignedBigInteger('idcertificado'); // Columna para relacionar con el certificado
-            $table->string('nombre', 255); // Columna de nombre del curso
-            $table->boolean('estado')->default(true); // Columna para estado del curso (activo/inactivo)
-            $table->timestamps(); // Crea automáticamente las columnas created_at y updated_at
+            $table->id('idcurso'); // Llave primaria llamada idcurso
+            $table->unsignedBigInteger('idcertificado'); // Llave foránea relacionada con la tabla certificados
+            $table->string('nombre', 255); // Nombre del curso
+            $table->integer('hora')->nullable(); // Campo hora
+            $table->boolean('estado')->default(true); // Estado del curso (activo/inactivo)
+            $table->timestamps(); // Campos created_at y updated_at
 
-            // Establecer relación con la tabla de certificados
-            $table->foreign('idcertificado')->references('id')->on('certificados')->onDelete('cascade');
+            // Relación con la tabla certificados
+            $table->foreign('idcertificado')->references('id')->on('certificados')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 

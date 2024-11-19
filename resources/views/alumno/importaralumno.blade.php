@@ -1,7 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-center items-center min-h-screen">
+<div class="relative h-screen rounded-lg bg-gray-50">
+
+    <nav class="absolute top-4 left-4 px-6 text-sm text-gray-500">
+        <ol class="list-reset flex">
+            <li><a href="{{ route('inicio.index') }}" class="text-blue-500 hover:underline">Inicio</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="{{ route('alumno.index') }}" class="text-blue-500 hover:underline">Personas</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-gray-700">Importar</li>
+        </ol>
+    </nav>
+
+    <div class ="p-8">
+    <div class="p-8">
+
     <div class="bg-white shadow-md rounded-lg p-6 max-w-lg w-full mx-auto">
         <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Importar Alumnos</h1>
 
@@ -43,9 +57,9 @@
             </div>
         </form>
 
-        <div class="mt-6 text-center">
+        {{-- <div class="mt-6 text-center">
             <a href="{{ route('alumno.index') }}" class="text-blue-600 hover:underline">Volver a la lista de alumnos</a>
-        </div>
+        </div> --}}
     </div>
 </div>
 @endsection

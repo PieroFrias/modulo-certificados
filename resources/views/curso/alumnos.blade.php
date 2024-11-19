@@ -61,7 +61,13 @@
                         <td class="py-4 px-6">{{ $alumno->apellido }}</td>
                         <td class="py-4 px-6">{{ $alumno->dni }}</td>
                         <td class="py-4 px-6">{{ $alumno->correo }}</td>
-                        <td class="py-4 px-6">{{ $alumno->estado ? 'Activo' : 'Inactivo' }}</td>
+
+                        <td class="py-4 px-6">
+                            <span class="px-4 py-1 rounded-full text-white text-sm font-semibold
+                                {{ $alumno->estado ? 'bg-yellow-300' : 'bg-red-500' }}">
+                                {{ $alumno->estado ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
                         <td class="py-4 px-6 text-center flex justify-center items-center gap-4">
                             <!-- Generar Certificado -->
                             <a href="{{ route('curso.generar_certificado', ['idcurso' => $curso->idcurso, 'idalumno' => $alumno->id]) }}" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 shadow-md" title="Generar Certificado">
