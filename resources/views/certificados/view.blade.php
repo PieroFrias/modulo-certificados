@@ -1,16 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto mt-10">
-    <h1 class="text-4xl font-bold mb-6 text-center">Vista del Certificado</h1>
+<div class="relative h-screen rounded-lg bg-gray-50 flex overflow-x-auto">
 
-    <!-- Contenedor para el canvas -->
-    <div id="pdf-container" class="flex justify-center">
-        <canvas id="pdf-canvas" class="border border-gray-300 shadow-lg"></canvas>
-    </div>
+     <!-- Nav -->
+     <nav class="absolute top-4 left-4 px-6 text-sm text-gray-500">
+        <ol class="list-reset flex">
+            <li><a href="{{ route('inicio.index') }}" class="text-blue-500 hover:underline">Inicio</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="{{ route('certificados.index') }}" class="text-blue-500 hover:underline">Plantillas</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-gray-700">Ver Plantilla</li>
+        </ol>
+    </nav>
 
-    <div class="flex justify-center mt-4">
-        <a href="{{ route('certificados.index') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Volver a la lista</a>
+    <div class="bg-white shadow-md rounded-lg p-4 max-w-6xl w-full mx-auto">
+        <br>
+        <h1 class="text-4xl font-semibold mb-6 text-center">Vista del Certificado</h1>
+
+        <!-- Contenedor para el canvas -->
+        <div id="pdf-container" class="flex justify-center">
+            <canvas id="pdf-canvas" class="border border-gray-300 shadow-lg rounded-lg"></canvas>
+        </div>
+
+        <div class="flex justify-center mt-4">
+            <a href="{{ route('certificados.index') }}" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Volver</a>
+        </div>
     </div>
 </div>
 
