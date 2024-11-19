@@ -60,8 +60,8 @@
 
         <!-- Contenedor del Certificado -->
         <div class="w-3/4">
-            <div class="pdf-container relative">
-                <canvas id="pdf-render" class="border border-gray-300"></canvas> <!-- Certificado Renderizado -->
+            <div class="pdf-container relative rounded-lg overflow-hidden bg-white shadow-md">
+                <canvas id="pdf-render" class="border border-gray-300 rounded-lg"></canvas> <!-- Certificado Renderizado -->
                 <p id="pdf-dimensions" class="text-center mt-2"></p> <!-- Dimensiones del PDF -->
 
                 <!-- Elementos Arrastrables -->
@@ -73,6 +73,7 @@
                 <p id="coords" class="text-center mt-2"></p> <!-- Mostrar Coordenadas -->
             </div>
         </div>
+
     </div>
 </div>
 

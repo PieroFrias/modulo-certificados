@@ -70,7 +70,7 @@ class ConfiguracionController extends Controller
         );
 
         // Redirigir a la lista de configuraciones con un mensaje de éxito
-        return redirect()->route('configuracion.configuracioncertificado')->with('success', 'Configuración actualizada correctamente.');
+        return redirect()->route('certificados.index')->with('success', 'Configuración actualizada correctamente.');
     }
 
     public function index()

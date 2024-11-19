@@ -37,9 +37,9 @@
                 <!-- Enlaces de navegación -->
                 <div id="menu" class="hidden sm:flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-start sm:items-center sm:w-auto w-full">
                     <a href="{{ route('inicio.index') }}" class="text-xl font-medium text-white hover:text-gray-200">Inicio</a>
-                    <a href="{{ route('curso.index') }}" class="text-xl font-medium text-white hover:text-gray-200">Cursos</a>
                     <a href="{{ route('certificados.index') }}" class="text-xl font-medium text-white hover:text-gray-200">Plantillas</a>
-                    <a href="{{ route('alumno.index') }}" class="text-xl font-medium text-white hover:text-gray-200">Alumnos</a>
+                    <a href="{{ route('curso.index') }}" class="text-xl font-medium text-white hover:text-gray-200">Cursos</a>
+                    <a href="{{ route('alumno.index') }}" class="text-xl font-medium text-white hover:text-gray-200">Personas</a>
                 </div>
 
                 <!-- Botón de cierre de sesión -->
