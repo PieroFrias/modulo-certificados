@@ -8,9 +8,9 @@
     @vite('resources/css/app.css')
     <script>
         function toggleSearchMethod(method) {
-            const dniInput = document.getElementById('dni-input');
-            const correoInput = document.getElementById('correo-input');
 
+            const correoInput = document.getElementById('correo-input');
+            const dniInput = document.getElementById('dni-input');
             if (method === 'dni') {
                 dniInput.style.display = 'block';
                 correoInput.style.display = 'none';
