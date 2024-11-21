@@ -14,6 +14,8 @@
             transition: background-image 1s ease-in-out;
         }
     </style>
+
+
 </head>
 <body class="bg-gray-900 bg-opacity-80 text-white flex flex-col h-screen">
 
@@ -21,7 +23,7 @@
     <nav class="bg-white p-1 flex items-center shadow-md">
         <!-- Logo -->
         <div class="flex items-center space-x-4">
-            <img src="https://aguasamazonicas.org/wp-content/uploads/2021/06/imagem_2023-05-29_120804614.png" alt="Logo" class="h-16 w-16 rounded-md">
+            <img src="{{ asset('images/logo1.webp') }}" alt="Logo" class="h-16 w-16 rounded-md">
         </div>
         <!-- Enlaces -->
         <div class="flex space-x-6">
@@ -31,21 +33,28 @@
         </div>
     </nav>
 
-    <!-- Contenido -->
-    <div class="flex-grow flex px-4">
-        <!-- Texto al lado izquierdo -->
-        <div class="w-1/2 flex items-center justify-center">
-            <h1 class="text-5xl font-bold uppercase text-center" style="color: #FF9800; text-shadow: -4px -4px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
-                certificados IIAP
+    <div class="flex-grow flex px-4 flex-wrap">
+        <!-- Texto al lado izquierdo o encima en pantallas pequeñas -->
+        <div class="w-full lg:w-1/2 flex flex-col items-center justify-center mb-1 lg:mb-0">
+            <h1 class="text-4xl lg:text-6xl font-bold uppercase text-center leading-tight lg:leading-normal"
+                style="color: #FF9800; -webkit-text-stroke: 2px white; text-stroke: 2px white; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">
+                <span class="block lg:inline">CERTIFICADOS</span>
+                <span class="block lg:inline">IIAP</span>
             </h1>
+            <!-- Logo debajo de las letras -->
+            <img src="{{ asset('images/logo2.png') }}" alt="Logo IIAP" class="h-32 w-32 lg:h-64 lg:w-64 mt-4 mx-auto">
 
         </div>
 
-        <!-- Formulario al lado derecho -->
-        <div class="w-1/2 flex justify-center items-center">
+
+
+
+
+
+       <!-- Formulario -->
+        <div class="w-full lg:w-1/2 flex justify-center items-start lg:items-center sm:mt-[-40px]">
             <form action="{{ route('login') }}" method="POST" class="bg-white bg-opacity-80 backdrop-blur-3xl p-8 md:p-16 rounded-lg shadow-lg w-full max-w-lg">
                 @csrf
-                {{-- <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Iniciar sesión</h1> --}}
                 @if ($errors->any())
                     <div class="text-red-500 text-sm mb-4">
                         {{ $errors->first() }}
@@ -58,7 +67,6 @@
                 <div class="mb-6 relative">
                     <label for="password" class="block text-sm font-medium text-gray-800">Contraseña</label>
                     <input type="password" id="password" name="password" class="w-full p-3 mt-2 rounded bg-gray-200 text-gray-800 focus:outline-none focus:ring focus:ring-blue-500">
-                    <!-- Botón para ver u ocultar contraseña -->
                     <button type="button"
                         onclick="togglePasswordVisibility('password')"
                         class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600">
@@ -70,31 +78,44 @@
                 </button>
             </form>
         </div>
+
     </div>
+
+
 
     <script>
         // Array de URLs de las imágenes
         const images = [
-            'https://www.peru.travel/Contenido/Destino/Imagen/es/9/1.2/Principal/Loreto.jpg',
-            'https://www.raptravelperu.com/wp-content/uploads/portada-rio-amazonas-iquitos.webp',
-            'https://investigacion.pucp.edu.pe/grupos/antropologia-ciudad/wp-content/uploads/sites/238/2019/04/espacio-fluvial-e1689201437565.jpg',
-            'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWEhfteH5_H4_Ddhvizr7NLhuHSFTIx-A-V9Sp6KPu-IOH88ILbQ6-0iBnr03BNdB5rms997Sm4v3ee4gKR9sbCl65oZad97KYFOQhOt-YEPNqChMe_8hM2uiy_qGYN3c5hwRdPHOa_ZE7/s1600/2.+Amazonas+Peru+(36).jpg'
+            "{{ asset('images/fondo1.jpg') }}",
+            "{{ asset('images/fondo2.webp') }}",
+            "{{ asset('images/fondo3.jpg') }}",
+            "{{ asset('images/fondo4.jpg') }}"
         ];
 
         let currentIndex = 0;
 
+        // Pre-cargar imágenes
+        const preloadedImages = [];
+        images.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+            preloadedImages.push(img);
+        });
+
         // Función para cambiar el fondo dinámicamente
         function changeBackground() {
-            document.body.style.backgroundImage = `url('${images[currentIndex]}')`;
+            const nextImage = preloadedImages[currentIndex].src; // Obtiene la URL de la imagen precargada
+            document.body.style.backgroundImage = `url('${nextImage}')`;
             currentIndex = (currentIndex + 1) % images.length; // Avanza al siguiente índice en bucle
         }
 
         // Cambiar fondo cada 5 segundos
-        setInterval(changeBackground, 5000);
+        setInterval(changeBackground, 4000);
 
         // Establecer el fondo inicial
         changeBackground();
     </script>
+
 
 <script>
     function togglePasswordVisibility(fieldId) {
