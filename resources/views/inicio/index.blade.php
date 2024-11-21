@@ -7,107 +7,252 @@
     <title>Panel de Administración</title>
     @vite('resources/css/app.css')
     <style>
-        /* Estilos personalizados para las animaciones */
+        /* Estilo base para el fondo y el contenedor */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        /* Estilo para las tarjetas estilo Pinterest */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(208px, 1fr));
+            gap: 1.5rem;
+        }
+
         .card {
             position: relative;
+            background-color: #fff;
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            max-width: 40rem; /* Limitar el ancho máximo de las tarjetas en pantallas grandes */
-            width: 100%; /* Asegurar que ocupe todo el ancho disponible */
-            margin: 0 auto; /* Centrar las tarjetas */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover {
             transform: scale(1.05);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -75%;
-            left: -75%;
-            width: 50%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15), transparent 70%);
-            transform: rotate(45deg);
-            transition: opacity 0.3s ease;
-            opacity: 0;
+        /* Estilo de los iconos dentro de las tarjetas */
+        .card-icon {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 50%;
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .card:hover::before {
-            opacity: 1;
-            animation: shine 0.75s forwards;
+        .card-icon svg {
+            width: 30px;
+            height: 30px;
+            color: #333;
         }
 
-        @keyframes shine {
-            from {
-                transform: rotate(45deg) translate(-100%, 0);
+        .card-content {
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffa500;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            font-size: 1rem;
+            color: #008080;
+        }
+
+        /* Agregar un pequeño margen al pie de cada tarjeta */
+        .card-footer {
+            padding: 1rem;
+            background-color: #f9f9f9;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+
+        /* Estilos de los botones */
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #008000;
+        }
+
+       
+        /* Media Queries para Responsividad */
+
+        /* Para pantallas pequeñas */
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 2rem;
             }
 
-            to {
-                transform: rotate(45deg) translate(200%, 0);
+            /* Ajustar las tarjetas en pantallas más pequeñas */
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 1rem;
+            }
+
+            .card {
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Asegurarse que las tarjetas no sean demasiado grandes */
+            .card-content {
+                padding: 1rem;
             }
         }
 
-        @media (min-width: 1024px) {
-            .container {
-                max-width: 800px; /* Para pantallas grandes, limitar el ancho total */
+        /* Para pantallas más pequeñas, como móviles */
+        @media (max-width: 468px) {
+            .grid {
+                grid-template-columns: 1fr; /* Poner una tarjeta por fila */
+                gap: 1rem;
+            }
+
+            .card {
+                width: 100%;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .card-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .card-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+            }
+
+            .card-description {
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 
-<body class="bg-gray-900 text-white">
-    <div class="container mx-auto p-6">
-        <h1 class="text-4xl font-bold mb-10 text-center">Panel de Administración</h1>
+<body>
 
-        <!-- Fila de tarjetas -->
-        <div class="grid grid-cols-1 gap-8 mb-24">
+    <div class="container">
+        <h1>Panel de Administración</h1>
+
+        <!-- Grid de tarjetas al estilo Pinterest -->
+        <div class="grid">
             <!-- Tarjeta Cursos -->
-            <a href="{{ route('curso.index') }}" class="card bg-gray-800 shadow-lg rounded-xl p-8 text-white h-56 flex flex-col justify-center">
-                <div class="flex items-center justify-center h-20 w-20 mx-auto bg-blue-700 rounded-full mb-6">
-                    <svg class="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div class="card">
+                <div class="card-icon bg-blue-200">
+                    <svg class="h-10 w-10 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2L2 7h20L12 2z" />
                         <path d="M2 9v11a1 1 0 001 1h4v-9h10v9h4a1 1 0 001-1V9H2z" />
                     </svg>
                 </div>
-                <h2 class="text-2xl font-semibold text-center">Cursos</h2>
-            </a>
+                <div class="card-content">
+                    <div class="card-title">Cursos</div>
+                    <div class="card-description">Gestiona todos los cursos ofrecidos en la plataforma.</div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('curso.index') }}" class="btn">Ir a Cursos</a>
+                </div>
+            </div>
 
             <!-- Tarjeta Alumnos -->
-            <a href="{{ route('alumno.index') }}" class="card bg-gray-800 shadow-lg rounded-xl p-8 text-white h-56 flex flex-col justify-center">
-                <div class="flex items-center justify-center h-20 w-20 mx-auto bg-green-700 rounded-full mb-6">
-                    <svg class="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div class="card">
+                <div class="card-icon bg-green-200">
+                    <svg class="h-10 w-10 text-green-500" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4z" />
                         <path d="M6 20v-1c0-2.67 5.33-4 6-4s6 1.33 6 4v1H6z" />
                     </svg>
                 </div>
-                <h2 class="text-2xl font-semibold text-center">Alumnos</h2>
-            </a>
+                <div class="card-content">
+                    <div class="card-title">Alumnos</div>
+                    <div class="card-description">Visualiza y gestiona a los alumnos registrados.</div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('alumno.index') }}" class="btn">Ir a Alumnos</a>
+                </div>
+            </div>
 
             <!-- Tarjeta Certificados -->
-            <a href="{{ route('certificados.index') }}" class="card bg-gray-800 shadow-lg rounded-xl p-8 text-white h-56 flex flex-col justify-center">
-                <div class="flex items-center justify-center h-20 w-20 mx-auto bg-purple-700 rounded-full mb-6">
-                    <svg class="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div class="card">
+                <div class="card-icon bg-purple-200">
+                    <svg class="h-10 w-10 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z" />
                     </svg>
                 </div>
-                <h2 class="text-2xl font-semibold text-center">Certificados</h2>
-            </a>
+                <div class="card-content">
+                    <div class="card-title">Certificados</div>
+                    <div class="card-description">Genera y gestiona los certificados de los alumnos.</div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('certificados.index') }}" class="btn">Ir a Certificados</a>
+                </div>
+            </div>
 
             <!-- Tarjeta Consulta Generar Certificado -->
-            <a href="{{ route('consulta.index') }}" class="card bg-gray-800 shadow-lg rounded-xl p-8 text-white h-56 flex flex-col justify-center">
-                <div class="flex items-center justify-center h-20 w-20 mx-auto bg-indigo-700 rounded-full mb-6">
-                    <svg class="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div class="card">
+                <div class="card-icon bg-indigo-200">
+                    <svg class="h-10 w-10 text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M10 2a8 8 0 105.293 14.293l5.707 5.707a1 1 0 01-1.414 1.414l-5.707-5.707A8 8 0 1010 2zm0 2a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd" />
                     </svg>
                 </div>
-                <h2 class="text-2xl font-semibold text-center">Consulta Generar Certificado</h2>
-            </a>
+                <div class="card-content">
+                    <div class="card-title">Consulta Generar Certificado</div>
+                    <div class="card-description">Consulta y genera certificados según las necesidades.</div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('consulta.index') }}" class="btn">Ir a Consulta</a>
+                </div>
+            </div>
         </div>
     </div>
+
 </body>
 
 </html>
+
+
+
