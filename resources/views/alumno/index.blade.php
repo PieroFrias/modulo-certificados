@@ -42,9 +42,9 @@
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Buscar alumnos..."
-                    class="border border-gray-300 rounded px-4 py-2 w-full sm:w-64 focus:outline-none"
-                />
-                <div class="flex space-x-2">
+                    class="border border-gray-300 rounded px-4 py-2 w-full sm:w-64 focus:outline-none"/>
+
+                    <div class="flex space-x-2 pl-2">
                     <button
                         type="submit"
                         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
