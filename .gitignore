@@ -25,3 +25,4 @@ yarn-error.log
 !public/images/*
 
 !storage/app/public/plantillas/plantilla_alumnos_importar.xlsx
+
