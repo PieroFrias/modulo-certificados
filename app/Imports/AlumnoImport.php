@@ -38,11 +38,6 @@ class AlumnoImport implements ToModel, WithBatchInserts, WithHeadingRow
         $dni = preg_replace('/\D/', '', trim($row[5])); // Solo números
         $correo = filter_var(trim($row[6]), FILTER_SANITIZE_EMAIL); // Filtrar correo
 
-        // Validar si los campos esenciales están vacíos o el correo es inválido
-        if (empty($dni) || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-            return null; // Saltar el registro si el DNI es inválido o el correo no es válido
-        }
-
         // Buscar si el registro ya existe en la base de datos
         $existingAlumno = Alumno::where('dni', $dni)
             ->where('idcurso', $this->idCurso)
@@ -77,15 +72,16 @@ class AlumnoImport implements ToModel, WithBatchInserts, WithHeadingRow
 
         // Si el registro no existe, crear uno nuevo
         return new Alumno([
-            'nombre' => $nombre, // Nombre filtrado y en mayúsculas
-            'apellido' => $apellido, // Apellido filtrado y en mayúsculas
-            'dni' => $dni, // DNI filtrado
-            'correo' => $correo, // Guardar el correo
+            'nombre' => $nombre ?: 'N/A', // Usar 'N/A' si el nombre está vacío
+            'apellido' => $apellido ?: 'N/A', // Usar 'N/A' si el apellido está vacío
+            'dni' => $dni ?: null, // Permitir que el DNI sea nulo
+            'correo' => $correo ?: null, // Permitir que el correo sea nulo
             'idcurso' => $this->idCurso, // Usar el ID del curso proporcionado
             'created_at' => now(), // Fecha de creación
             'updated_at' => now(), // Fecha de actualización
         ]);
     }
+    
 
 
 
