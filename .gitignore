@@ -23,3 +23,5 @@ yarn-error.log
 # Incluir las imágenes de public/images
 !public/images/
 !public/images/*
+
+!storage/app/public/plantillas/plantilla_alumnos.xlsx
