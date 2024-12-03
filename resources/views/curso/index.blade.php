@@ -15,14 +15,17 @@
         <br>
         <h1 class="text-4xl font-semibold mb-8 text-center text-gray-800">Eventos / cursos</h1>
 
-        <div class="flex justify-start mb-6">
+        <div class="flex justify-start gap-2 mb-6">
             <a href="{{ route('curso.create') }}" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 shadow-md flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-               Crear Nuevo
+                Crear Nuevo
             </a>
+
+
         </div>
+
 
 
         @if (session('success'))
@@ -39,8 +42,9 @@
                         <th class="py-4 px-6 text-left">ID</th>
                         <th class="py-4 px-6 text-left">Nombre</th>
                         <th class="py-4 px-6 text-left">Certificado</th>
-                        <th class="py-4 px-6 text-left">Duración/Horas</th> <!-- Nueva columna -->
+                        <th class="py-4 px-6 text-left">Duración</th> <!-- Nueva columna -->
                         <th class="py-4 px-6 text-left">Estado</th>
+                        <th class="py-4 px-6 text-left">Total Personas</th> <!-- Nueva columna -->
                         <th class="py-4 px-6 text-center">Acciones</th>
                     </tr>
                 </thead>
@@ -52,16 +56,26 @@
                         <td class="py-4 px-6">{{ $curso->certificado->nombre ?? 'No asignado' }}</td>
                         <td class="py-4 px-6">{{ $curso->hora }} : 00</td> <!-- Mostrar la hora -->
                         <td class="py-4 px-6">
-                            <span class="px-4 py-1 rounded-full text-white text-sm font-semibold
+                            <span class="px-4 py-1 rounded-full text-black text-sm font-semibold
                                 {{ $curso->estado ? 'bg-yellow-300' : 'bg-red-500' }}">
                                 {{ $curso->estado ? 'Activo' : 'Inactivo' }}
                             </span>
                         </td>
+                        <td class="py-4 px-6">{{ $curso->alumnos_count }}</td> <!-- Mostrar total de alumnos -->
                         <td class="py-4 px-6 text-center flex justify-center items-center gap-4">
-                            <a href="{{ route('curso.alumnos', $curso->idcurso) }}" class="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 shadow-md" title="Lista Personas">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.242 5.992h12m-12 6.003H20.24m-12 5.999h12M4.117 7.495v-3.75H2.99m1.125 3.75H2.99m1.125 0H5.24m-1.92 2.577a1.125 1.125 0 1 1 1.591 1.59l-1.83 1.83h2.16M2.99 15.745h1.125a1.125 1.125 0 0 1 0 2.25H3.74m0-.002h.375a1.125 1.125 0 0 1 0 2.25H2.99" />
+
+                            <a href="{{ route('curso.alumnos', $curso->idcurso) }}" class="bg-green-500  text-white py-2 px-4 rounded-md hover:bg-gray-700 active:bg-gray-500 shadow-md flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V3a.75.75 0 0 1 .75-.75Zm-9 13.5a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                                 </svg>
+                                Exportar Certificados
+                            </a>
+
+                            <a   href="{{ route('curso.importaralumnos', $curso->idcurso) }}" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 active:bg-gray-500 shadow-md flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                                </svg>
+                                Enviar certificados
                             </a>
 
                             <a href="{{ route('curso.edit', $curso->idcurso) }}" class="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600 shadow-md" title="Editar">

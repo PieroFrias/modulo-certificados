@@ -15,6 +15,7 @@ class CreateConfiguracionesTable extends Migration
             $table->decimal('pos_y', 11, 0)->default(0); // Posición vertical con precisión decimal
             $table->string('fuente', 255)->default('Arial'); // Fuente de la letra
             $table->integer('tamaño_fuente')->default(16); // Tamaño de la letra
+            $table->string('color', 255)->default('#000000'); // Color de la letra
             $table->string('tipo', 255)->nullable(); // Columna tipo opcional
             $table->string('estado', 255)->nullable(); // Columna estado opcional
             $table->timestamps(); // created_at y updated_at
@@ -23,7 +24,7 @@ class CreateConfiguracionesTable extends Migration
             $table->foreign('idcertificado')
                 ->references('id')
                 ->on('certificados')
-                ->onDelete('restrict') // Acción ON DELETE
+                ->onDelete('cascade') // Acción ON DELETE
                 ->onUpdate('restrict'); // Acción ON UPDATE
         });
     }

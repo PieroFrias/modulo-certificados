@@ -9,7 +9,7 @@ use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\EnvioCertificadoController;
 
 
 // Rutas de login
@@ -150,5 +150,16 @@ Route::put('configuraciones/{idcertificado}', [ConfiguracionController::class, '
 
 
 
-// RUTA PARA ADMINISTRADOR LOGIN ------------------------------------------------------------------------
+// RUTA PARA ENVIAR CERTIFICADO  ------------------------------------------------------------------------
 
+//RUTA curso enviar certificado con la vista enviarcertificado
+Route::get('curso/{idcurso}/enviarcertificado', [CursoController::class, 'enviarCertificado'])->name('curso.enviarcertificado')->middleware('auth');
+ //RUTA PARA IMPORTAR ALUMNOS EN LA VISTA DE enviarcertificado los alumnos se importan en archivo pdf
+Route::post('curso/{idcurso}/enviarcertificado', [CursoController::class, 'importarAlumnos'])->name('curso.importaralumnos')->middleware('auth');
+
+
+// Route::post('curso/{idcurso}/enviar-todos', [CursoController::class, 'enviarTodosCertificados'])->name('curso.enviarTodosCertificados');
+// Route::post('curso/{idcurso}/enviar-correo/{idalumno}', [CursoController::class, 'enviarCorreoIndividual'])->name('curso.enviarCorreoIndividual');
+
+Route::post('curso/{idcurso}/enviar-correo/{idalumno}', [EnvioCertificadoController::class, 'enviarCorreoIndividual'])->name('curso.enviarCorreoIndividual')->middleware('auth');
+Route::post('curso/{idcurso}/enviar-todos', [EnvioCertificadoController::class, 'enviarCorreosMasivos'])->name('curso.enviarTodosCertificados')->middleware('auth');
