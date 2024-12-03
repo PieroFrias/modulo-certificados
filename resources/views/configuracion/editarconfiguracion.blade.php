@@ -33,19 +33,21 @@
                         <option value="Arial" {{ $configuracion->fuente == 'Arial' ? 'selected' : '' }}>Arial</option>
                         <option value="Helvetica" {{ $configuracion->fuente == 'Helvetica' ? 'selected' : '' }}>Helvetica</option>
                         <option value="Times" {{ $configuracion->fuente == 'Times' ? 'selected' : '' }}>Times New Roman</option>
-                        <option value="Georgia" {{ $configuracion->fuente == 'Georgia' ? 'selected' : '' }}>Georgia</option>
-                        <option value="Garamond" {{ $configuracion->fuente == 'Garamond' ? 'selected' : '' }}>Garamond</option>
-                        <option value="Brush Script MT" {{ $configuracion->fuente == 'Brush Script MT' ? 'selected' : '' }}>Brush Script MT</option>
-                        <option value="Palatino Linotype" {{ $configuracion->fuente == 'Palatino Linotype' ? 'selected' : '' }}>Palatino Linotype</option>
-                        <option value="Perpetua" {{ $configuracion->fuente == 'Perpetua' ? 'selected' : '' }}>Perpetua</option>
                     </select>
                 </div>
 
-                <!-- Tamaño de Fuente -->
+               <!-- Tamaño de Fuente -->
                 <div class="form-group">
                     <label for="tamaño_fuente" class="block text-sm font-medium text-gray-700">Tamaño:</label>
-                    <input type="number" name="tamaño_fuente" id="tamaño_fuente" value="{{ $configuracion->tamaño_fuente }}" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300" min="8" max="72">
+                    <input type="number" name="tamaño_fuente" id="tamaño_fuente" value="{{ $configuracion->tamaño_fuente ?? 20 }}" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300" min="8" max="72">
                 </div>
+
+                <!-- Selección de Color -->
+                <div class="form-group">
+                    <label for="color" class="block text-sm font-medium text-gray-700">Color de la letra:</label>
+                    <input type="color" name="color" id="color" value="{{ $configuracion->color ?? '#000000' }}" class="form-control w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
+                </div>
+
 
                 <!-- Botón para guardar cambios -->
                 <button type="submit" class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-400 focus:ring focus:ring-blue-300">
@@ -93,6 +95,7 @@
     const draggableContainer = document.getElementById('draggable-container'); // Contenedor del draggable
     const fuenteSelect = document.getElementById('fuente');
     const tamañoFuenteInput = document.getElementById('tamaño_fuente');
+    const colorInput = document.getElementById('color');
 
     const A4_WIDTH_MM = 210; // Ancho A4 en mm
     const A4_HEIGHT_MM = 297; // Alto A4 en mm
@@ -205,8 +208,10 @@
     });
 
     window.addEventListener('load', () => {
+        const defaultFontSize = tamañoFuenteInput.value || 20;
         draggable.style.fontFamily = fuenteSelect.value;
         draggable.style.fontSize = `${tamañoFuenteInput.value}px`;
+        draggable.style.color = colorInput.value; // Aplica el color inicial
     });
 
     draggable.addEventListener('mousedown', function (event) {
@@ -257,6 +262,10 @@
     tamañoFuenteInput.addEventListener('input', () => {
         draggable.style.fontSize = `${tamañoFuenteInput.value}px`;
     });
+
+    colorInput.addEventListener('input', () => {
+    draggable.style.color = colorInput.value;});
+
 </script>
 
 
