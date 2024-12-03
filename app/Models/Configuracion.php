@@ -16,7 +16,8 @@ class Configuracion extends Model
         'pos_x',          // Posición horizontal
         'pos_y',          // Posición vertical
         'fuente',         // Fuente de la letra
-        'tamaño_fuente'   // Tamaño de la letra
+        'tamaño_fuente' ,  // Tamaño de la letra
+        'color',          // Color de la letra
     ];
 
     // Relación con el modelo Certificado

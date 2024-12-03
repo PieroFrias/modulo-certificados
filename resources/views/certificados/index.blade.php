@@ -45,7 +45,7 @@
                         <tr class="border-b hover:bg-gray-100">
                             {{-- <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->id }}</td> --}}
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->nombre }}</td>
-                            <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->created_at->format('d/m/Y') }}</td>
+                            <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $certificado->updated_at }}</td>
                             <td class="py-2 px-2 sm:py-3 sm:px-6 text-center flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4">
                                 <a href="{{ route('configuracion.editarconfiguracion', $certificado->id) }}" class="bg-purple-500 text-white py-1 px-2 sm:px-3 rounded hover:bg-purple-600 text-xs sm:text-sm">Personalizar</a>
 

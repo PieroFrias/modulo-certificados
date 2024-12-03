@@ -69,7 +69,8 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => 'America/Lima', // Cambia según tu ubicación
+
 
     /*
     |--------------------------------------------------------------------------

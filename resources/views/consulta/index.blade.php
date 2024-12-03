@@ -26,7 +26,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            toggleSearchMethod('dni'); // Mostrar el campo DNI por defecto
+            toggleSearchMethod('correo'); // Mostrar el campo DNI por defecto
         });
     </script>
 </head>
@@ -39,10 +39,11 @@
             <!-- Logo -->
             <img src="https://aguasamazonicas.org/wp-content/uploads/2021/06/imagem_2023-05-29_120804614.png" alt="Logo" class="h-16 w-16 rounded-md">
             <!-- Enlaces -->
-            <div id="nav-links" class="hidden sm:flex flex-row space-x-4 items-center">
-                <a href="http://iiap.org.pe/web/presentacion_iiap.aspx" class="text-black text-lg font-bold hover:text-gray-600">IIAP</a>
-                <a href="https://amazonia.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600">Guía Ilustrada</a>
-                <a href="http://ictiologicas.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600">Ictiología</a>
+            <div class="flex space-x-6">
+                <a href="http://iiap.org.pe/web/presentacion_iiap.aspx" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >IIAP</a>
+                <a href="https://amazonia.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >Guía Ilustrada</a>
+                <a href="http://ictiologicas.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >Ictiología</a>
+                <a href="https://vertebrados.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >Vertebrados</a>
             </div>
         </div>
 

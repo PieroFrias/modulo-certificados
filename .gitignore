@@ -26,3 +26,12 @@ yarn-error.log
 
 !storage/app/public/plantillas/plantilla_alumnos_importar.xlsx
 
+# Ignorar todo el contenido de la carpeta certificados
+/storage/app/public/certificados/*
+!/storage/app/public/certificados/
+!/storage/app/public/certificados/.gitkeep
+
+# Ignorar todo el contenido de la carpeta certificados_firmados
+/storage/app/public/certificados_firmados/*
+!/storage/app/public/certificados_firmados/
+!/storage/app/public/certificados_firmados/.gitkeep
