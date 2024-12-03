@@ -27,9 +27,10 @@
         </div>
         <!-- Enlaces -->
         <div class="flex space-x-6">
-            <a href="http://iiap.org.pe/web/presentacion_iiap.aspx" class="text-black text-lg font-bold hover:text-gray-600">IIAP</a>
-            <a href="https://amazonia.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600">Guía Ilustrada</a>
-            <a href="http://ictiologicas.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600">Ictiología</a>
+            <a href="http://iiap.org.pe/web/presentacion_iiap.aspx" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >IIAP</a>
+            <a href="https://amazonia.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >Guía Ilustrada</a>
+            <a href="http://ictiologicas.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >Ictiología</a>
+            <a href="https://vertebrados.iiap.gob.pe/" class="text-black text-lg font-bold hover:text-gray-600" target="_blank" >Vertebrados</a>
         </div>
     </nav>
 

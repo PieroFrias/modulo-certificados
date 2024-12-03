@@ -55,6 +55,7 @@ class ConfiguracionController extends Controller
             'pos_y' => 'required|numeric', // Alto máximo de A4 en mm
             'fuente' => 'required|string',
             'tamaño_fuente' => 'required|numeric|min:8|max:100',
+            'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         // Buscar o crear la configuración asociada al certificado
@@ -65,7 +66,8 @@ class ConfiguracionController extends Controller
                 'pos_x' => $request->input('pos_x'),
                 'pos_y' => $request->input('pos_y'),
                 'fuente' => $request->input('fuente'),
-                'tamaño_fuente' => $request->input('tamaño_fuente')
+                'tamaño_fuente' => $request->input('tamaño_fuente'),
+                'color' => $request->input('color'), // Guardar el color
             ]
         );
 
