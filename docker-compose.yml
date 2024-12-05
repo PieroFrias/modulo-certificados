@@ -14,7 +14,7 @@ services:
     image: node:20
     restart: unless-stopped
     working_dir: /var/www/app
-    command: npm run build
+    command: /bin/sh -c "npm install && npm run build"
     volumes:
       - .:/var/www/app:delegated
     ports:
