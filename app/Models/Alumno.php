@@ -16,7 +16,7 @@ class Alumno extends Model
     protected $primaryKey = 'id';
 
     // Especificar los campos que se pueden asignar en masa
-    protected $fillable = ['nombre', 'apellido', 'dni', 'correo', 'idcurso', 'estado'];
+    protected $fillable = ['nombre', 'apellido', 'dni', 'correo', 'idcurso', 'estado', 'enviado', 'vecesenviado'];
 
     public $timestamps = true; // Esto habilita los timestamps automáticamente
 

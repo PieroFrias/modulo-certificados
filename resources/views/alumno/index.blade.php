@@ -31,7 +31,7 @@
                     <svg class="w-6 h-6 text-gray-500 transform rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
-                    <a href="{{ asset('storage/plantillas/plantilla_alumnos.xlsx') }}" class="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700 text-center">Plantilla</a>
+                    <a href="{{ asset('storage/plantillas/plantilla_alumnos_importar.xlsx') }}" class="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700 text-center">Plantilla</a>
                 </div>
             </div>
 
@@ -92,7 +92,7 @@
                             <td class="py-2 px-2 sm:py-3 sm:px-6">{{ $alumno->curso ? $alumno->curso->nombre : 'Sin Curso' }}</td>
 
                             <td class="py-4 px-6">
-                                <span class="px-4 py-1 rounded-full text-white text-sm font-semibold
+                                <span class="px-4 py-1 rounded-full text-black text-sm font-semibold
                                     {{ $alumno->estado ? 'bg-yellow-300' : 'bg-red-500' }}">
                                     {{ $alumno->estado ? 'Activo' : 'Inactivo' }}
                                 </span>
