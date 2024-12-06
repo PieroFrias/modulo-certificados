@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Editar</title>
 @section('content')
 <div class="relative h-screen rounded-lg bg-gray-50 flex overflow-x-auto">
 
@@ -49,7 +49,7 @@
                 <label for="template" class="block text-sm font-medium text-gray-600 mb-1">Cambiar Plantilla PDF</label>
                 <input type="file" name="template" id="template"
                     class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-4 py-2 text-gray-800 bg-gray-50 transition" accept="application/pdf">
-             
+
             </div>
 
             <!-- Botón de Actualizar -->

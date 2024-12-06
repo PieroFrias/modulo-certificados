@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Enviar</title>
 @section('content')
 
 <div class="relative min-h-screen bg-gray-50">
