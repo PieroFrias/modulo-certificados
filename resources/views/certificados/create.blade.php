@@ -1,6 +1,6 @@
 <!-- resources/views/certificados/create.blade.php -->
 @extends('layouts.app')
-
+<title>Crear</title>
 @section('content')
 <div class="relative h-screen rounded-lg bg-gray-50">
 
