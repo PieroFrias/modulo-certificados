@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Editar</title>
 @section('content')
 <div class="relative h-screen rounded-lg bg-gray-50">
     <!-- Breadcrumb fijo -->
