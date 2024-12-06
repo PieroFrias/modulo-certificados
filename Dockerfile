@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.2
 
 RUN apt-get update && apt-get install -y \
     libfreetype-dev \
@@ -19,5 +19,5 @@ COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 
 COPY composer.json ./
 COPY ./docker/entry-point.sh ./docker/entry-point.sh
-RUN chmod +x /var/www/app/docker/entry-point.sh
-ENTRYPOINT ["/var/www/app/docker/entry-point.sh"]
+RUN chmod +x ./docker/entry-point.sh
+ENTRYPOINT ["./docker/entry-point.sh"]

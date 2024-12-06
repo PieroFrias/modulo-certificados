@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'CERTIFICADOS IIAP') }}</title>
     @vite('resources/css/app.css') <!-- Cargar CSS con Vite -->
 </head>
 <body class="bg-gray-100">

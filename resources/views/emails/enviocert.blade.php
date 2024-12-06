@@ -23,6 +23,11 @@
             font-size: 24px;
             font-weight: bold;
         }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -39,7 +44,10 @@
 
     <p>Gracias por participar.</p>
 
+    <p>Consulta tu certificado usando tu correo o tu DNI</p>
+    <p>en la Web: <a href="https://certificados.iiap.gob.pe/consulta" target="_blank">https://certificados.iiap.gob.pe/consulta</a></p>
+
     <p>Saludos,<br>
-    Equipo organizador</p>
+    Equipo organizador del IIAP</p>
 </body>
 </html>

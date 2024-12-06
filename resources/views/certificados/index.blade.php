@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Certificados</title>
 @section('content')
 <div class="relative h-screen rounded-lg bg-gray-50">
 
