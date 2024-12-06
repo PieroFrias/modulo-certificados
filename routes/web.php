@@ -163,3 +163,6 @@ Route::post('curso/{idcurso}/enviarcertificado', [CursoController::class, 'impor
 
 Route::post('curso/{idcurso}/enviar-correo/{idalumno}', [EnvioCertificadoController::class, 'enviarCorreoIndividual'])->name('curso.enviarCorreoIndividual')->middleware('auth');
 Route::post('curso/{idcurso}/enviar-todos', [EnvioCertificadoController::class, 'enviarCorreosMasivos'])->name('curso.enviarTodosCertificados')->middleware('auth');
+
+
+Route::get('/consulta/descargar/{codigo}', [ConsultaController::class, 'descargarCertificado'])->name('consulta.descargarCertificado');

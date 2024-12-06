@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Plantilla</title>
 @section('content')
 <div class="relative h-screen rounded-lg bg-gray-50 flex flex-col overflow-x-auto">
     <!-- Nav -->
