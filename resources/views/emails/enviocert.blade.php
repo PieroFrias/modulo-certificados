@@ -40,12 +40,10 @@
 
     <p>Hola {{ $alumno->nombre }},</p>
 
-    <p>Adjunto encontrarás tu certificado correspondiente al Evento/curso "{{ $alumno->curso->nombre ?? 'Curso no especificado' }}".</p>
+    <p>Adjunto encontrarás tu certificado correspondiente al Evento "{{ $alumno->curso->nombre ?? 'Curso no especificado' }}".</p>
 
     <p>Gracias por participar.</p>
 
-    <p>Consulta tu certificado usando tu correo o tu DNI</p>
-    <p>en la Web: <a href="https://certificados.iiap.gob.pe/consulta" target="_blank">https://certificados.iiap.gob.pe/consulta</a></p>
 
     <p>Saludos,<br>
     Equipo organizador del IIAP</p>
