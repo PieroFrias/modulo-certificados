@@ -47,14 +47,14 @@
 
                 <div>
                     <label for="dni" class="block text-sm font-medium text-gray-700">DNI</label>
-                    <input type="number" name="dni" id="dni" value="{{ old('dni', $alumno->dni) }}" maxlength="15" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    <input type="number" name="dni" id="dni" value="{{ old('dni', $alumno->dni) }}" maxlength="15" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
 
                 <!-- Correo -->
                 <div>
                     <label for="correo" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
                     <input type="email" name="correo" id="correo" value="{{ old('correo', $alumno->correo) }}"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
 
 

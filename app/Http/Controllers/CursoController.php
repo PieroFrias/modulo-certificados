@@ -333,6 +333,7 @@ private function hexToRgb($hexColor)
 
 public function enviarCertificado(Request $request, $idcurso)
 {
+    set_time_limit(0);
     // Cargar el curso con los alumnos relacionados
     $curso = Curso::findOrFail($idcurso);
 
@@ -361,6 +362,12 @@ public function enviarCertificado(Request $request, $idcurso)
     // Calcular el total de certificados importados
     $contadorCertificados = $baseQuery->count();
 
+    // Contar los certificados pendientes de envío (enviado = 0)
+    $cantidadFaltantes = $curso->alumnos()
+        ->whereIn('codigo', $certificadosFirmados)
+        ->where('enviado', 1) // Filtrar por estado enviado = 0
+        ->count();
+
     // Aplicar búsqueda si se proporciona un término
     $query = clone $baseQuery; // Clonar la consulta base para no afectar el contador
     if ($request->filled('search')) {
@@ -377,21 +384,25 @@ public function enviarCertificado(Request $request, $idcurso)
     // Paginación: se cargan solo 20 registros por página
     $alumnosFirmados = $query->paginate(20);
 
+    // Retornar la vista con los datos necesarios
     return view('curso.enviarcertificado', [
         'idcurso' => $idcurso,
         'curso' => $curso,
         'alumnosFirmados' => $alumnosFirmados,
-        'contadorCertificados' => $contadorCertificados, // Pasar el contador a la vista
+        'contadorCertificados' => $contadorCertificados,
+        'cantidadFaltantes' => $cantidadFaltantes, // Pasar el contador de pendientes a la vista
     ]);
 }
+
 
 
 public function importarAlumnos(Request $request, $idcurso)
 {
     $request->validate([
-        'certificados' => 'required|file|mimes:zip,rar,7z,tar,gz,pdf', // Aceptar archivos comprimidos o PDF
+        'certificados' => 'required|file|mimes:zip,rar,7z,tar,gz',
     ]);
 
+    $zip = new \ZipArchive();
     $file = $request->file('certificados');
     $destinationPath = storage_path('app/public/certificados_firmados/');
 
@@ -400,89 +411,55 @@ public function importarAlumnos(Request $request, $idcurso)
         mkdir($destinationPath, 0755, true);
     }
 
-    $processedFiles = 0;
-    $errors = [];
-    $totalFiles = 0;
-
-    if ($file->getClientOriginalExtension() === 'pdf') {
-        // Caso 1: Subida de un único archivo PDF
-        $totalFiles = 1;
-        $fileName = $file->getClientOriginalName();
-
-        if (preg_match('/\[(\w{12})\]\.pdf$/', $fileName, $matches)) {
-            $codigo = $matches[1];
-
-            // Buscar al alumno con el código
-            $alumno = Alumno::where('codigo', $codigo)->first();
-
-            if ($alumno) {
-                $targetPath = $destinationPath . $codigo . '.pdf';
-
-                // Guardar el archivo si no existe
-                if (!file_exists($targetPath)) {
-                    $file->move($destinationPath, $codigo . '.pdf');
-                }
-                $processedFiles++;
-            } else {
-                $errors[] = "El archivo {$fileName} no coincide con ningún alumno.";
+    if ($zip->open($file->path()) === TRUE) {
+        // Validar si contiene carpetas
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $stat = $zip->statIndex($i);
+            if (str_ends_with($stat['name'], '/')) {
+                return redirect()->back()->with('error', 'El archivo no debe contener carpetas, solo certificados directamente.');
             }
-        } else {
-            $errors[] = "El archivo {$fileName} no cumple con el formato [código].pdf.";
         }
-    } else {
-        // Caso 2: Subida de un archivo comprimido con múltiples PDFs
-        $zip = new \ZipArchive();
 
-        if ($zip->open($file->path()) === TRUE) {
-            $totalFiles = $zip->numFiles;
+        $zip->extractTo($destinationPath);
+        $zip->close();
 
-            for ($i = 0; $i < $totalFiles; $i++) {
-                $fileInfo = $zip->statIndex($i);
-                $fileName = $fileInfo['name'];
+        // Obtener todos los archivos descomprimidos
+        $files = scandir($destinationPath);
+        foreach ($files as $file) {
+            $filePath = $destinationPath . $file;
 
-                // Omitir directorios
-                if (str_ends_with($fileName, '/')) {
-                    continue;
-                }
+            // Verificar si es un archivo y no un directorio
+            if (!is_file($filePath)) {
+                continue; // Saltar directorios como "." y ".."
+            }
 
-                // Verificar si el archivo cumple con el formato [código].pdf
-                if (preg_match('/\[(\w{12})\]\.pdf$/', $fileName, $matches)) {
-                    $codigo = $matches[1];
+            // Verificar si el nombre del archivo contiene el formato [abc123def456GHI]
+            if (preg_match('/\[(\w{12})\]/', $file, $matches)) {
+                $codigo = $matches[1]; // Extraer el código de 12 caracteres
 
-                    // Buscar al alumno con el código
-                    $alumno = Alumno::where('codigo', $codigo)->first();
-
-                    if ($alumno) {
-                        $targetPath = $destinationPath . $codigo . '.pdf';
-
-                        // Extraer y mover el archivo si no existe
-                        if (!file_exists($targetPath)) {
-                            $zip->extractTo($destinationPath, [$fileName]);
-                            rename($destinationPath . $fileName, $targetPath);
-                        }
-                        $processedFiles++;
+                // Buscar al alumno con el código
+                $alumno = Alumno::where('codigo', $codigo)->first();
+                if ($alumno) {
+                    // Validar que el archivo pertenece al alumno y moverlo si no existe
+                    $targetPath = $destinationPath . $codigo . '.pdf';
+                    if (!file_exists($targetPath)) {
+                        rename($filePath, $targetPath); // Mover el archivo con el nombre correcto
                     } else {
-                        $errors[] = "El archivo {$fileName} no coincide con ningún alumno.";
+                        unlink($filePath); // Eliminar duplicados
                     }
                 } else {
-                    $errors[] = "El archivo {$fileName} no cumple con el formato [código].pdf.";
+                    // Si no hay alumno, eliminar el archivo
+                    // unlink($filePath);
                 }
+            } else {
+                // Eliminar archivos que no cumplen con el formato
+                // unlink($filePath);
             }
-
-            $zip->close();
-        } else {
-            return response()->json(['error' => 'No se pudo descomprimir el archivo.']);
         }
+    } else {
+        return redirect()->back()->with('error', 'No se pudo descomprimir el archivo.');
     }
 
-    return response()->json([
-        'success' => true,
-        'totalFiles' => $totalFiles,
-        'processedFiles' => $processedFiles,
-        'errors' => $errors,
-    ]);
+    return redirect()->route('curso.enviarcertificado', $idcurso)->with('success', 'Certificados firmados cargados exitosamente.');
 }
-
-
-
 }
