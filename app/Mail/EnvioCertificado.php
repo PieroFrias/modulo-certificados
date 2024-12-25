@@ -31,7 +31,7 @@ class EnvioCertificado extends Mailable
      */
     public function build()
     {
-        return $this->subject('Certificado del Evento/curso')
+        return $this->subject('Certificado del ' . $this->alumno->curso->nombre)
                     ->view('emails.enviocert')
                     ->attach($this->certificadoPath, [
                         'as' => "{$this->alumno->nombre}_certificado.pdf",

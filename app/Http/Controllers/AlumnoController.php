@@ -47,8 +47,8 @@ class AlumnoController extends Controller
     $validated = $request->validate([
         'nombre' => 'required|string|max:255',
         'apellido' => 'required|string|max:255',
-        'dni' => 'required|string|max:15', // Eliminado el unique
-        'correo' => 'required|email|max:255', // Validación para correo único
+        'dni' => 'max:15', // Eliminado el unique
+        'correo' => '|email|max:255', // Validación para correo único
         'idcurso' => 'required|exists:curso,idcurso',
         'estado' => 'required|boolean',
     ]);
@@ -76,8 +76,8 @@ class AlumnoController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'dni' => 'required|string|max:15', // Eliminado el unique
-            'correo' => 'required|email|max:255', // Validar correo único, excepto para el registro actual
+            'dni' => 'max:15', // Eliminado el unique
+            'correo' => '|email|max:255', // Validar correo único, excepto para el registro actual
             'idcurso' => 'required|exists:curso,idcurso',
             'estado' => 'required|boolean',
         ]);
