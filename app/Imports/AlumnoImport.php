@@ -72,8 +72,8 @@ class AlumnoImport implements ToModel, WithBatchInserts, WithHeadingRow
 
         // Si no se encuentra un registro existente, crear uno nuevo
         return new Alumno([
-            'nombre' => $nombre ?: 'N/A', // Usar 'N/A' si el nombre está vacío
-            'apellido' => $apellido ?: 'N/A', // Usar 'N/A' si el apellido está vacío
+            'nombre' => $nombre ?: null, // Permitir que el nombre sea nulo
+            'apellido' => $apellido ?: null, // Permitir que el apellido sea nulo
             'dni' => $dni ?: null, // Permitir que el DNI sea nulo
             'correo' => $correo ?: null, // Permitir que el correo sea nulo
             'idcurso' => $this->idCurso, // Usar el ID del curso proporcionado

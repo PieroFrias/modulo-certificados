@@ -24,6 +24,10 @@
         <div class="mb-4 text-gray-800 font-semibold text-center">
             Certificados importados: <span class="text-blue-600">{{ $contadorCertificados }}</span>
         </div>
+         <!-- Mostrar el número de certificados importados -->
+         <div class="mb-4 text-gray-800 font-semibold text-center">
+            Certificados ENVIADOS: <span class="text-blue-600">{{ $cantidadFaltantes }}</span>
+        </div>
 
         <div class="flex flex-col sm:flex-row sm:justify-between mb-4 space-y-2 sm:space-y-0">
             <!-- Izquierda: Botones -->
@@ -40,13 +44,18 @@
                     @csrf
                     <button
                         type="submit"
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center gap-2">
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center gap-2"
+                        @if ($cantidadFaltantes > 200) disabled @endif>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                             <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
                         </svg>
                         Enviar todos los certificados
                     </button>
                 </form>
+
+
+
+
             </div>
 
             <!-- Derecha: Barra de búsqueda y botones -->
@@ -72,8 +81,35 @@
                         Limpiar
                     </button>
                 </form>
+
+
+                <form action="{{ route('curso.reenviarFaltantes', $idcurso) }}" method="POST">
+                    @csrf
+                    <button
+                        type="submit"
+                        class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 13.5h-2v-2h2Zm0-4h-2v-6h2Z" />
+                        </svg>
+                        Reenviar Faltantes
+                    </button>
+                </form>
+
+                {{-- @if (isset($cantidadFaltantes) && $cantidadFaltantes > 150) --}}
+                <button
+                    class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 flex items-center gap-2"
+                    onclick="abrirModalConfiguracion()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 13.5h-2v-2h2Zm0-4h-2v-6h2Z" />
+                    </svg>
+                    Configurar Reenvío
+                </button>
+            {{-- @endif --}}
             </div>
         </div>
+
+
+
 
         <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md overflow-x-auto">
             @if ($alumnosFirmados->isEmpty())
@@ -145,42 +181,96 @@
     </div>
 </div>
 
-
 <!-- Modal para importar certificados firmados -->
 <div id="importModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="p-6 sm:p-8 rounded-lg shadow-lg w-11/12 max-w-md sm:max-w-lg border-4 border-black" style="background-color: #d0d0d0;">
         <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center">Importar Certificados Firmados</h2>
-        <form id="importForm" enctype="multipart/form-data">
+        <form action="{{ route('curso.importaralumnos', $idcurso) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-4">
                 <label for="certificados" class="block text-sm sm:text-lg font-medium text-gray-800 mb-2">
-                    Subir archivo ZIP con todos los certificados firmados o suba los PDF comprimidos de 1000 en 1000 certificados:
+                    Subir archivo ZIP con certificados firmados:
                 </label>
                 <input
                     type="file"
                     id="certificados"
                     name="certificados"
-                    accept=".zip,.rar,.7z,.tar,.gz,.pdf"
+                    accept=".zip,.rar,.7z,.tar,.gz"
                     class="w-full px-4 py-2 rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 shadow-sm"
                     required>
             </div>
-            <div id="progressContainer" class="hidden mb-4">
-                <p id="progressText" class="text-gray-800 font-semibold text-center">
-                    Progreso: <span id="progressValue">0%</span>
-                </p>
-                <div class="relative w-full h-4 bg-gray-300 rounded">
-                    <div id="progressBar" class="absolute h-4 bg-blue-600 rounded" style="width: 0%;"></div>
-                </div>
-                <p id="filesProcessed" class="text-sm text-gray-700 text-center mt-2">0 de 0 archivos procesados</p>
-            </div>
             <div class="flex justify-end space-x-4">
-                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600" onclick="cerrarModal()">Cancelar</button>
-                <button type="submit" id="submitButton" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Subir</button>
-                <button type="button" id="doneButton" class="hidden bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700" onclick="cerrarModalYRefrescar()">Hecho</button>
+                <button
+                    type="button"
+                    class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+                    onclick="cerrarModal()">
+                    Cancelar
+                </button>
+                <button
+                    type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    Subir
+                </button>
             </div>
         </form>
     </div>
 </div>
+
+<div id="modalConfiguracion" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="p-6 sm:p-8 rounded-lg shadow-lg w-11/12 max-w-md sm:max-w-lg bg-white border">
+        <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center">Configurar Cantidad de Correos a Enviar</h2>
+        <form action="{{ route('curso.reenviarFaltantesConfigurados', $idcurso) }}" method="POST">
+            @csrf
+            <div class="mb-4">
+                <label for="cantidad" class="block text-sm font-medium text-gray-800 mb-2">
+                    Cantidad de correos a enviar:
+                </label>
+                <input
+                    type="number"
+                    id="cantidad"
+                    name="cantidad"
+                    min="1"
+                    class="w-full px-4 py-2 rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 shadow-sm"
+                    required>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button
+                    type="button"
+                    class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+                    onclick="cerrarModalConfiguracion()">
+                    Cancelar
+                </button>
+                <button
+                    type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    Enviar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para mostrar errores -->
+@if (session('error'))
+<div id="errorModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg p-6 w-11/12 max-w-lg border-black" style="border: 4px solid black;">
+        <h2 class="text-lg font-bold text-red-600 mb-4">Errores detectados</h2>
+        <p class="text-gray-700">{{ session('error') }}</p>
+        <div class="mt-4 text-right">
+            <button
+                onclick="cerrarErrorModal()"
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+@endif
+
+
+
+
+
 
 <script>
     function abrirModal() {
@@ -193,66 +283,20 @@
         modal.classList.add('hidden');
     }
 
-    function cerrarModalYRefrescar() {
-        cerrarModal();
-        window.location.reload(); // Refrescar la página
+    function abrirModalConfiguracion() {
+    document.getElementById('modalConfiguracion').classList.remove('hidden');
+}
+
+function cerrarModalConfiguracion() {
+    document.getElementById('modalConfiguracion').classList.add('hidden');
+}
+
+
+function cerrarErrorModal() {
+        document.getElementById('errorModal').classList.add('hidden');
     }
 
-    document.getElementById('importForm').addEventListener('submit', function (e) {
-        e.preventDefault();
 
-        const formData = new FormData(this);
-        const progressContainer = document.getElementById('progressContainer');
-        const progressBar = document.getElementById('progressBar');
-        const progressValue = document.getElementById('progressValue');
-        const filesProcessed = document.getElementById('filesProcessed');
-        const submitButton = document.getElementById('submitButton');
-        const doneButton = document.getElementById('doneButton');
-
-        // Ocultar el botón de "Subir"
-        submitButton.classList.add('hidden');
-
-        progressContainer.classList.remove('hidden');
-        progressBar.style.width = '0%';
-        progressValue.textContent = '0%';
-        filesProcessed.textContent = '0 de 0 archivos procesados';
-
-        fetch("{{ route('curso.importaralumnos', $idcurso) }}", {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const totalFiles = data.totalFiles;
-                let processed = 0;
-
-                // Actualizar el progreso dinámicamente
-                const interval = setInterval(() => {
-                    if (processed < data.processedFiles) {
-                        processed++;
-                        const progressPercent = Math.round((processed / totalFiles) * 100);
-                        progressBar.style.width = `${progressPercent}%`;
-                        progressValue.textContent = `${progressPercent}%`;
-                        filesProcessed.textContent = `${processed} de ${totalFiles} archivos procesados`;
-                    } else {
-                        clearInterval(interval);
-                        doneButton.classList.remove('hidden'); // Mostrar el botón "Hecho" al terminar
-                    }
-                }, 500); // Simular cada archivo como procesado en 500ms
-            } else {
-                alert('Error: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error durante la importación.');
-        });
-    });
 </script>
-
 
 @endsection
