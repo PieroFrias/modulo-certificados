@@ -166,3 +166,10 @@ Route::post('curso/{idcurso}/enviar-todos', [EnvioCertificadoController::class, 
 
 
 Route::get('/consulta/descargar/{codigo}', [ConsultaController::class, 'descargarCertificado'])->name('consulta.descargarCertificado');
+Route::post('/curso/{idcurso}/reenviar-faltantes', [EnvioCertificadoController::class, 'reenviarFaltantes'])->name('curso.reenviarFaltantes');
+Route::post('/curso/{idcurso}/reenviar-faltantes-configurados', [EnvioCertificadoController::class, 'reenviarFaltantesConfigurados'])->name('curso.reenviarFaltantesConfigurados');
+
+// Route::get('/curso/{idcurso}/enviar-certificados', [EnvioCertificadoController::class, 'enviarCertificados'])->name('curso.enviarcertificado');
+// Route::post('/curso/{idcurso}/enviar-todos', [EnvioCertificadoController::class, 'enviarCorreosMasivos'])->name('curso.enviarTodosCertificados');
+
+// Route::get('/curso/{idcurso}/enviar-certificados', [EnvioCertificadoController::class, 'enviarCertificados'])->name('curso.enviarcertificado');
