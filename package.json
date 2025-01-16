@@ -6,14 +6,22 @@
         "build": "vite build --config vite.prod.config.js"
     },
     "devDependencies": {
+        "autoprefixer": "^10.4.20",
         "axios": "^1.7.4",
+        "flowbite": "^2.5.2",
         "laravel-vite-plugin": "^1.0",
-        "tailwindcss": "^3.4.11",
+        "postcss": "^8.5.1",
+        "tailwindcss": "^3.4.17",
         "tailwindcss-animate": "^1.0.7",
+        "typescript": "^5.7.3",
         "vite": "^5.4.11"
     },
     "dependencies": {
+        "@radix-ui/react-slot": "^1.1.1",
         "alpinejs": "^3.14.1",
-        "flowbite": "^2.5.1"
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "lucide-react": "^0.471.1",
+        "tailwind-merge": "^2.6.0"
     }
 }
