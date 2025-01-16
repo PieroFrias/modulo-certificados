@@ -399,7 +399,7 @@ public function enviarCertificado(Request $request, $idcurso)
 public function importarAlumnos(Request $request, $idcurso)
 {
     $request->validate([
-        'certificados' => 'required|file|mimes:zip,rar,7z,tar,gz|max:1024000',
+        'certificados' => 'required|file|mimes:zip|max:1024000',
     ]);
 
     $zip = new \ZipArchive();
