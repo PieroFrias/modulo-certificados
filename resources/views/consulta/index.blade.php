@@ -16,14 +16,7 @@
 <body>
     <!-- Aplicar estilos personalizados -->
     <style>
-        /* 
-        @media (max-width: 768px) {
-            body {
-                background-image: url('{{ asset('images/fondo4consulta.jpg') }}');
-                background-size: cover;
-                background-position: top;
-            }
-        }
+        
         .play-regular {
             font-family: "Play", serif;
             font-weight: 400;
@@ -34,7 +27,7 @@
             font-family: "Play", serif;
             font-weight: 700;
             font-style: normal;
-        } */
+        }
         
         * {
             margin: 0;
@@ -143,7 +136,7 @@
     </header>
 
     <!-- Contenido principal -->
-    <div  class="banner flex flex-col gap-8 p-6 justify-center items-start">
+    <div  class="banner flex flex-col gap-8 p-24 justify-center items-start">
         <div class=" flex flex-col">
             <h1 id="title-banner" class="text-4xl sm:text-5xl  text-white">
                 TODOS TUS CERTIFICADOS
@@ -157,6 +150,7 @@
         >
             ¡CONSULTAR AQUI!
         </button>
+        <a href="https://pixabay.com/es/users/bergslay-1151140/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=6488472" class="fixed right-0 text-xs text-black/40">Foto</a>
     </div>
     <main id="form-section" class="form-section flex flex-col lg:flex-row items-start gap-4 p-8 w-full">
         <!-- Form Section -->
