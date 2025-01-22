@@ -138,7 +138,7 @@
     <!-- Contenido principal -->
     <div  class="banner flex flex-col gap-8 p-24 justify-center items-start">
         <div class=" flex flex-col">
-            <h1 id="title-banner" class="text-4xl sm:text-5xl  text-white">
+            <h1 id="title-banner" class="text-3xl sm:text-5xl  text-white">
                 TODOS TUS CERTIFICADOS
             </h1>
             <p id="footer-banner" class="text-lg text-white">EN UN SOLO LUGAR</p>
@@ -146,13 +146,13 @@
         <button 
             id="footer-banner"
             onclick="document.getElementById('form-section').scrollIntoView({behavior: 'smooth'})"
-            class="bg-[#EB8021] rounded-lg p-4 text-sm text-white scale-100 hover:scale-105"
+            class="bg-[#EB8021] rounded-lg p-4 text-xs md:text-sm text-white scale-100 hover:scale-105"
         >
             ¡CONSULTAR AQUI!
         </button>
-        <a href="https://pixabay.com/es/users/bergslay-1151140/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=6488472" class="fixed right-0 text-xs text-black/40">Foto</a>
+        <a href="https://pixabay.com/es/users/bergslay-1151140/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=6488472" class="relative right-0 text-xs text-black/40">Foto</a>
     </div>
-    <main id="form-section" class="form-section flex flex-col lg:flex-row items-start gap-4 p-8 w-full">
+    <main id="form-section" class="form-section flex flex-col lg:flex-row items-start gap-4 p-16 w-full">
         <!-- Form Section -->
         <section class="flex flex-col w-full lg:max-w-md p-4 gap-4 rounded-lg shadow-lg mx-auto sm:my-8">
             <h1 class="text-lg font-bold text-center sm:text-left">Formulario de búsqueda</h1>
@@ -217,8 +217,15 @@
             </form>
         </section>
 
-            <section class="flex flex-col gap-4 w-full  p-4 rounded shadow">
-                <h1 class="text-lg font-bold">Tus certificados</h1>
+            <section class="flex flex-col gap-4 w-full  p-4 rounded-lg shadow-lg">
+                <div class="flex flex-col gap-4 w-full  p-4 h-80">
+                    <h1 class="text-lg font-bold">Tus certificados</h1>
+                    @if (!$alumnos || $alumnos->isEmpty())
+                        @if (!request()->has('dni') && !request()->has('correo'))
+                            <p class="text-sm text-gray-600">Realiza una búsqueda para mostrar los datos.</p>
+                        @endif
+                    @endif
+                </div>
                 @if ($alumnos && $alumnos->isNotEmpty())
                     <div class="overflow-x-auto bg-opacity-90 p-6">
                         <table class="table-auto w-full bg-white rounded-lg border-collapse">
