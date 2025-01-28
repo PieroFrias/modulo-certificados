@@ -312,7 +312,10 @@
 
         // Obtener los datos del formulario
         const formData = new FormData(this);
-        const url = this.action;
+        const dni = document.getElementById('dni').value;
+        const correo = document.getElementById('correo').value;
+        const resultadosDiv = document.getElementById('resultados');
+        const url = `{{ route('consulta.index') }}?dni=${dni}&correo=${correo}`;
 
         // Hacer la petición con fetch
         fetch(url, {
