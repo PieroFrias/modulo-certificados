@@ -12,7 +12,7 @@
     @vite('resources/css/app.css')
 </head>
 
-<body id="banner" class="flex items-center p-24 w-full">
+<body id="banner" class="flex container mx-auto items-center w-full">
 <style>
     .play-regular {
         font-family: "Play", serif;
