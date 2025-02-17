@@ -14,7 +14,7 @@ use App\Http\Controllers\EnvioCertificadoController;
 
 // Rutas de login
 //pon la ruta de inicio en la raiz de login llamalo atravez de AuthController
-Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::get('/', [ConsultaController::class, 'index'])->name('consulta.index');
 
 
 
